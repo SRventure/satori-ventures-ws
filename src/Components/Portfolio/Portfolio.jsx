@@ -29,7 +29,7 @@ const Portfolio = () => {
             >
               <img
                 src={company.logo}
-                alt="Satori Ventures portfolio company logo"
+                alt={company.name ? `${company.name} — Satori Ventures portfolio` : "Satori Ventures portfolio company logo"}
                 loading="lazy"
                 className="max-h-8 w-auto object-contain opacity-70 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition duration-300"
               />

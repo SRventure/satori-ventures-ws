@@ -25,8 +25,16 @@ import company25 from "../assets/portfolio/company_logos/logo25.png";
 import company26 from "../assets/portfolio/company_logos/logo26.png";
 import company27 from "../assets/portfolio/company_logos/logo27.png";
 import company28 from "../assets/portfolio/company_logos/logo28.png";
+import reflectionAi from "../assets/portfolio/company_logos/reflection.png";
+import chaiDiscovery from "../assets/portfolio/company_logos/chai.png";
+import miniMax from "../assets/portfolio/company_logos/minimax.png";
+import deepRobotics from "../assets/portfolio/company_logos/deeprobotics.png";
 
 export const companies = [
+  { logo: reflectionAi, name: "Reflection AI" },
+  { logo: chaiDiscovery, name: "Chai Discovery" },
+  { logo: miniMax, name: "MiniMax" },
+  { logo: deepRobotics, name: "Deep Robotics" },
   { logo: company1 },
   { logo: company2 },
   { logo: company3 },
