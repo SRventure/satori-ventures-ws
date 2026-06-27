@@ -14,9 +14,13 @@ const ContactUs = () => {
   } = useForm()
 
   const onSubmit = (data) => {
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_q7rgzm8';
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_4zis24c';
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'RElQ17WxbehSv1AID';
+
     emailjs
-      .sendForm('service_q7rgzm8', 'template_4zis24c', form.current, {
-        publicKey: 'RElQ17WxbehSv1AID',
+      .sendForm(serviceId, templateId, form.current, {
+        publicKey,
       })
       .then(
         () => {

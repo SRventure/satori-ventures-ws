@@ -4,10 +4,12 @@ import './index.css'
 import { router } from './Routes/Routes'
 import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Toaster />
     <RouterProvider router={router} />
+    <Analytics />
   </React.StrictMode>,
 )
