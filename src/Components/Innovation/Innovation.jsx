@@ -9,7 +9,7 @@ const Innovation = () => {
       <Container>
         {/* Section heading info */}
         <div className='py-[109px]'>
-          <p className='font-dmSans text-[#5D423F] w-[95%] md:w-[65%] xl:w-[62%] 2xl:w-[40%] mx-auto text-center text-[21px] capitalize'>Where ideas ignite, innovation takes flight, breaking the old chains, in decentralized domains – we champion the creators, share ownerships, and decentralize the gains</p>
+          <p className='font-dmSans text-[#5D423F] w-[95%] md:w-[65%] xl:w-[62%] 2xl:w-[40%] mx-auto text-center text-[21px]'>Where ideas ignite, innovation takes flight, breaking the old chains, in decentralized domains – we champion the creators, share ownerships, and decentralize the gains</p>
 
           {/* Cards  */}
           <div className='md:flex justify-center gap-6 mt-10 px-3'>
@@ -22,7 +22,7 @@ const Innovation = () => {
                   suffix=" Million USD+"
                   className="text-[31px] text-[#441611] font-bold mb-2"
                 />
-                <p className='font-inter text-[#5D423F] text-[17px] capitalize'>Investment in USD</p>
+                <p className='font-inter text-[#5D423F] text-[17px]'>Investment in USD</p>
               </div>
 
               <div className='relative'>
@@ -43,7 +43,7 @@ const Innovation = () => {
                   suffix=" (Since 2022)"
                   className="text-[31px] text-[#441611] font-bold mb-2"
                 />
-                <p className='font-inter text-[#5D423F] text-[17px] capitalize'>Number Of Investments</p>
+                <p className='font-inter text-[#5D423F] text-[17px]'>Number of Investments</p>
               </div>
 
               <div className="relative">

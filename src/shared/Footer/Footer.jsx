@@ -8,7 +8,7 @@ const Footer = () => {
       <Container>
         <div className='md:flex md:justify-between items-center mb-12'>
           <Link to="/">
-            <img src={img} alt="Image" className='w-[135px] cursor-pointer' />
+            <img src={img} alt="Satori Ventures" className='w-[135px] cursor-pointer' />
           </Link>
 
           <div className='font-dmSans flex flex-col md:flex-row gap-y-3 md:gap-x-10 text-white mt-5 md:mt-0'>

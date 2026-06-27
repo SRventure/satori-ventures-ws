@@ -41,7 +41,7 @@ const GlobeComponent = () => {
         showGraticules={true}
         atmosphereColor='#9b0901f8'
         atmosphereAltitude='0.25'
-        globeImageUrl='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLrm8XvJkHkZOmH54vx_AwYTFNqlfnnLWJpqlodi1IJdYqSeyGk3cXVVTsC64lp3X1DOI&usqp=CAU'
+        globeImageUrl='/earth-texture.jpg'
 
         hexPolygonsData={countries.features}
         hexPolygonResolution={3}
