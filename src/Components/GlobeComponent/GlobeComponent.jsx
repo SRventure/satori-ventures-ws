@@ -1,8 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import * as THREE from 'three';
 import Globe from 'react-globe.gl';
 
 const GlobeComponent = () => {
   const [countries, setCountries] = useState({ features: [] });
+
+  const globeMaterial = useMemo(
+    () =>
+      new THREE.MeshPhongMaterial({
+        color: '#f3eeec',
+        transparent: true,
+        opacity: 0.95,
+        shininess: 6,
+      }),
+    []
+  );
 
   const myData = [
     {
@@ -41,7 +53,7 @@ const GlobeComponent = () => {
         showGraticules={true}
         atmosphereColor='#9b0901f8'
         atmosphereAltitude='0.25'
-        globeImageUrl='/earth-texture.jpg'
+        globeMaterial={globeMaterial}
 
         hexPolygonsData={countries.features}
         hexPolygonResolution={3}

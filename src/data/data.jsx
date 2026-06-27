@@ -9,13 +9,8 @@ import company8 from "../assets/portfolio/company_logos/logo8.png";
 import company9 from "../assets/portfolio/company_logos/logo9.png";
 import company10 from "../assets/portfolio/company_logos/logo10.png";
 import company11 from "../assets/portfolio/company_logos/logo11.png";
-import company12 from "../assets/portfolio/company_logos/logo12.png";
-import company14 from "../assets/portfolio/company_logos/logo14.png";
-import company15 from "../assets/portfolio/company_logos/logo15.png";
-import company16 from "../assets/portfolio/company_logos/logo16.png";
 import company17 from "../assets/portfolio/company_logos/logo17.png";
 import company18 from "../assets/portfolio/company_logos/logo18.png";
-import company19 from "../assets/portfolio/company_logos/logo19.png";
 import company20 from "../assets/portfolio/company_logos/logo20.png";
 import company21 from "../assets/portfolio/company_logos/logo21.png";
 import company22 from "../assets/portfolio/company_logos/logo22.png";
@@ -46,13 +41,8 @@ export const companies = [
   { logo: company9 },
   { logo: company10 },
   { logo: company11 },
-  { logo: company12 },
-  { logo: company14 },
-  { logo: company15 },
-  { logo: company16 },
   { logo: company17 },
   { logo: company18 },
-  { logo: company19 },
   { logo: company20 },
   { logo: company21 },
   { logo: company22 },
