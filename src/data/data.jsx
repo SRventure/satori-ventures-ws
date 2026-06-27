@@ -10,7 +10,6 @@ import company9 from "../assets/portfolio/company_logos/logo9.png";
 import company10 from "../assets/portfolio/company_logos/logo10.png";
 import company11 from "../assets/portfolio/company_logos/logo11.png";
 import company12 from "../assets/portfolio/company_logos/logo12.png";
-import company13 from "../assets/portfolio/company_logos/logo13.png";
 import company14 from "../assets/portfolio/company_logos/logo14.png";
 import company15 from "../assets/portfolio/company_logos/logo15.png";
 import company16 from "../assets/portfolio/company_logos/logo16.png";
@@ -40,7 +39,6 @@ export const companies = [
   { logo: company10 },
   { logo: company11 },
   { logo: company12 },
-  { logo: company13 },
   { logo: company14 },
   { logo: company15 },
   { logo: company16 },
