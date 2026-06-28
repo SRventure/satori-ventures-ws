@@ -1,0 +1,14 @@
+{
+  "name": "Satori Ventures",
+  "short_name": "Satori",
+  "description": "Venture capital for Web3, blockchain, and AI.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F6F4F2",
+  "theme_color": "#9B0801",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

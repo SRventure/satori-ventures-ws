@@ -23,17 +23,26 @@ const Portfolio = () => {
           data-aos-duration="800"
         >
           {visible.map((company, index) => (
-            <div
+            <a
               key={index}
-              className="flex justify-center items-center border-b border-r border-[#ebedf0] px-6 py-10 group"
+              href={company.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${company.name} — ${company.category}`}
+              className="relative flex justify-center items-center border-b border-r border-[#ebedf0] px-6 py-12 group overflow-hidden"
             >
               <img
                 src={company.logo}
-                alt={company.name ? `${company.name} — Satori Ventures portfolio` : "Satori Ventures portfolio company logo"}
+                alt={`${company.name} — Satori Ventures portfolio`}
                 loading="lazy"
-                className="h-10 w-full object-contain opacity-60 group-hover:opacity-100 transition duration-300"
+                className="h-9 w-full object-contain opacity-55 transition duration-300 group-hover:opacity-0"
               />
-            </div>
+              <div className="absolute inset-0 flex flex-col justify-center text-left px-5 py-4 bg-[#F6F4F2] opacity-0 translate-y-1 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                <span className="text-[10px] font-dmSans font-semibold uppercase tracking-[0.12em] text-[#9B0801]">{company.category}</span>
+                <h3 className="text-[16px] font-dmSerifDisplay text-[#441611] leading-tight mt-1">{company.name}</h3>
+                <p className="text-[11px] font-dmSans text-[#6F5D5B] leading-snug mt-1.5 line-clamp-3">{company.description}</p>
+              </div>
+            </a>
           ))}
         </div>
 

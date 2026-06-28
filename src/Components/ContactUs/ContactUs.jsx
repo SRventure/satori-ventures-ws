@@ -1,11 +1,12 @@
 import Container from "../Container/Container";
 import { useForm } from "react-hook-form"
 import emailjs from '@emailjs/browser';
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import toast from 'react-hot-toast';
 
 const ContactUs = () => {
   const form = useRef();
+  const [sending, setSending] = useState(false);
   const {
     register,
     handleSubmit,
@@ -14,10 +15,15 @@ const ContactUs = () => {
   } = useForm()
 
   const onSubmit = (data) => {
+    // Honeypot: real users never fill this hidden field; bots do.
+    if (data.company_website) return;
+    if (sending) return;
+
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_q7rgzm8';
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_4zis24c';
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'RElQ17WxbehSv1AID';
 
+    setSending(true);
     emailjs
       .sendForm(serviceId, templateId, form.current, {
         publicKey,
@@ -25,14 +31,14 @@ const ContactUs = () => {
       .then(
         () => {
           reset();
-          toast.success('Email send successfully');
-          // console.log('SUCCESS!');
+          toast.success("Message sent — we'll be in touch shortly.");
         },
         (error) => {
           console.error('FAILED...', error?.text);
           toast.error('Something went wrong. Please try again or email us directly.');
         },
-      );
+      )
+      .finally(() => setSending(false));
   };
 
   return (
@@ -48,6 +54,16 @@ const ContactUs = () => {
           {/* Contact Form */}
           <div className="md:w-1/2 md:mx-5">
             <form ref={form} onSubmit={handleSubmit(onSubmit)}>
+              {/* Honeypot — hidden from users, catches bots */}
+              <input
+                type="text"
+                tabIndex="-1"
+                autoComplete="off"
+                {...register("company_website")}
+                name="company_website"
+                className="hidden"
+                aria-hidden="true"
+              />
               <div className="md:flex gap-x-4 mb-3">
                 <div className="form-control md:w-1/2 mb-3 md:mb-0">
                   <label className="label mb-1">
@@ -83,7 +99,7 @@ const ContactUs = () => {
               </label>
 
               <div className="form-control mt-6">
-                <input type="submit" value="Send Message" className="bg-[#9B0801] hover:bg-[#9b0901d8] text-white text-[15px] font-dmSans px-8 py-3 rounded-md w-[150px] flex justify-center cursor-pointer duration-200" />
+                <input type="submit" value={sending ? "Sending…" : "Send Message"} disabled={sending} className="bg-[#9B0801] hover:bg-[#9b0901d8] disabled:opacity-60 disabled:cursor-not-allowed text-white text-[15px] font-dmSans px-8 py-3 rounded-md w-[150px] flex justify-center cursor-pointer duration-200" />
               </div>
             </form>
           </div>

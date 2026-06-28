@@ -3,8 +3,16 @@
 
 <head>
    <meta charset="UTF-8" />
-   <link rel="icon" type="image/png" href="/satorl_logo.png" />
+   <link rel="icon" href="/favicon.ico" sizes="any" />
+   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+   <link rel="manifest" href="/site.webmanifest" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" />
    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
    <title>Satori Ventures — Fostering the Blockchain Renaissance</title>
@@ -17,14 +25,17 @@
    <meta property="og:title" content="Satori Ventures — Fostering the Blockchain Renaissance" />
    <meta property="og:description" content="A venture capital firm investing in transformative Web3, blockchain, and AI companies." />
    <meta property="og:url" content="https://www.satori.ventures/" />
-   <meta property="og:image" content="https://www.satori.ventures/satorl_logo.png" />
+   <meta property="og:image" content="https://www.satori.ventures/og-image.png" />
+   <meta property="og:image:width" content="1200" />
+   <meta property="og:image:height" content="630" />
+   <meta property="og:image:alt" content="Satori Ventures — Fostering the Blockchain Renaissance" />
    <meta property="og:site_name" content="Satori Ventures" />
 
    <!-- Twitter -->
-   <meta name="twitter:card" content="summary" />
+   <meta name="twitter:card" content="summary_large_image" />
    <meta name="twitter:title" content="Satori Ventures — Fostering the Blockchain Renaissance" />
    <meta name="twitter:description" content="A venture capital firm investing in transformative Web3, blockchain, and AI companies." />
-   <meta name="twitter:image" content="https://www.satori.ventures/satorl_logo.png" />
+   <meta name="twitter:image" content="https://www.satori.ventures/og-image.png" />
 
    <!-- Organization schema -->
    <script type="application/ld+json">
@@ -38,6 +49,41 @@
      "email": "otc@satoriresearch.io"
    }
    </script>
+   <script type="application/ld+json">
+   {
+     "@context": "https://schema.org",
+     "@type": "ItemList",
+     "name": "Satori Ventures Portfolio",
+     "itemListElement": [
+       { "@type": "ListItem", "position": 1, "name": "Reflection AI", "url": "https://reflection.ai" },
+       { "@type": "ListItem", "position": 2, "name": "Chai Discovery", "url": "https://www.chaidiscovery.com" },
+       { "@type": "ListItem", "position": 3, "name": "MiniMax", "url": "https://www.minimax.io" },
+       { "@type": "ListItem", "position": 4, "name": "DEEP Robotics", "url": "https://www.deeprobotics.cn/en" },
+       { "@type": "ListItem", "position": 5, "name": "Solana", "url": "https://solana.com" },
+       { "@type": "ListItem", "position": 6, "name": "NEAR Protocol", "url": "https://near.org" },
+       { "@type": "ListItem", "position": 7, "name": "Aptos", "url": "https://aptosfoundation.org" },
+       { "@type": "ListItem", "position": 8, "name": "Flow", "url": "https://flow.com" },
+       { "@type": "ListItem", "position": 9, "name": "Pyth Network", "url": "https://www.pyth.network" },
+       { "@type": "ListItem", "position": 10, "name": "Akash Network", "url": "https://akash.network" },
+       { "@type": "ListItem", "position": 11, "name": "Galxe", "url": "https://www.galxe.com" },
+       { "@type": "ListItem", "position": 12, "name": "Raydium", "url": "https://raydium.io" },
+       { "@type": "ListItem", "position": 13, "name": "DODO", "url": "https://dodoex.io" },
+       { "@type": "ListItem", "position": 14, "name": "Zebec", "url": "https://zebec.io" },
+       { "@type": "ListItem", "position": 15, "name": "Only1", "url": "https://only1.com" },
+       { "@type": "ListItem", "position": 16, "name": "Cirus Foundation", "url": "https://cirus.io" },
+       { "@type": "ListItem", "position": 17, "name": "Trias", "url": "https://www.trias.one" },
+       { "@type": "ListItem", "position": 18, "name": "Tabi", "url": "https://www.tabichain.com" },
+       { "@type": "ListItem", "position": 19, "name": "SoBit", "url": "https://www.sobit.io" },
+       { "@type": "ListItem", "position": 20, "name": "Alcove", "url": "https://www.alcove.pro" },
+       { "@type": "ListItem", "position": 21, "name": "ZTX", "url": "https://www.ztx.io" },
+       { "@type": "ListItem", "position": 22, "name": "MADWorld", "url": "https://www.madworld.io" },
+       { "@type": "ListItem", "position": 23, "name": "Breathonics", "url": "https://www.breathonics.com" },
+       { "@type": "ListItem", "position": 24, "name": "Solana Name Service", "url": "https://www.sns.id" },
+       { "@type": "ListItem", "position": 25, "name": "Last Remains", "url": "https://lastremains.io" },
+       { "@type": "ListItem", "position": 26, "name": "Earn Alliance", "url": "https://www.earnalliance.com" }
+     ]
+   }
+   </script>
 </head>
 
 <body>
@@ -45,7 +91,11 @@
    <script type="module" src="/src/main.jsx"></script>
    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
    <script>
-      AOS.init();
+      AOS.init({
+         disable: function () {
+            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+         },
+      });
    </script>
 
    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">

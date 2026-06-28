@@ -37,10 +37,10 @@ const Innovation = () => {
               <div>
                 <CountUp
                   start={0}
-                  end={28}
+                  end={128}
                   duration={4}
                   separator=" "
-                  suffix=" (Since 2022)"
+                  suffix="+ (Since 2022)"
                   className="text-[31px] text-[#441611] font-bold mb-2"
                 />
                 <p className='font-inter text-[#5D423F] text-[17px]'>Number of Investments</p>
