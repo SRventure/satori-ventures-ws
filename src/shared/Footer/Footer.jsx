@@ -15,8 +15,8 @@ const Footer = () => {
       <Container>
         <div className="md:flex md:justify-between md:items-start pb-14">
           <div>
-            <a href="#home" onClick={anchorHandler('home', -140)} aria-label="Satori Ventures — back to top">
-              <img src={img} alt="Satori Ventures" className="w-[140px]" loading="lazy" />
+            <a href="#home" onClick={anchorHandler('home', -140)} aria-label="Satori.Ventures — back to top">
+              <img src={img} alt="Satori.Ventures" className="w-[140px]" loading="lazy" />
             </a>
             <p className="font-dmSans text-white/60 text-[14px] leading-relaxed max-w-[300px] mt-5">
               A venture capital firm investing in transformative Web3, blockchain,
@@ -42,8 +42,8 @@ const Footer = () => {
               <p className="font-inter text-white/50 text-[11px] font-semibold uppercase tracking-[0.2em] mb-4">Get in touch</p>
               <ul className="font-dmSans text-white/90 text-[15px] space-y-2.5">
                 <li>
-                  <a href="mailto:otc@satoriresearch.io" className="hover:text-white hover:underline underline-offset-4">
-                    otc@satoriresearch.io
+                  <a href="mailto:contact@srventures.io" className="hover:text-white hover:underline underline-offset-4">
+                    contact@srventures.io
                   </a>
                 </li>
                 <li>
@@ -60,7 +60,7 @@ const Footer = () => {
       <div className="border-t border-white/10">
         <Container>
           <p className="font-dmSans text-white/60 text-[13px] text-center py-6 tracking-wide">
-            © {new Date().getFullYear()} Satori Ventures. All rights reserved.
+            © {new Date().getFullYear()} Satori.Ventures. All rights reserved.
           </p>
         </Container>
       </div>

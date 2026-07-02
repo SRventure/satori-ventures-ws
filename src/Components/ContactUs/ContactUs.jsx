@@ -67,10 +67,10 @@ const ContactUs = () => {
                 from you.
               </p>
               <a
-                href="mailto:otc@satoriresearch.io"
+                href="mailto:contact@srventures.io"
                 className="inline-block font-dmSans text-[#9B0801] font-semibold text-[16px] mt-5 hover:underline underline-offset-4"
               >
-                otc@satoriresearch.io
+                contact@srventures.io
               </a>
             </Reveal>
           </div>

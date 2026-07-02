@@ -44,8 +44,8 @@ const NavBar = () => {
     >
       <Container>
         <nav className="flex items-center justify-between py-4 font-dmSans" aria-label="Primary">
-          <a href="#home" onClick={navigate('home', -140)} className="shrink-0" aria-label="Satori Ventures — home">
-            <img src={logo} alt="Satori Ventures" className="w-32 md:w-40" />
+          <a href="#home" onClick={navigate('home', -140)} className="shrink-0" aria-label="Satori.Ventures — home">
+            <img src={logo} alt="Satori.Ventures" className="w-32 md:w-40" />
           </a>
 
           <ul className="hidden lg:flex items-center gap-x-12">

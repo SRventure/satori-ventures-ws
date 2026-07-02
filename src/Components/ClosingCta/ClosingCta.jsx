@@ -66,10 +66,10 @@ const ClosingCta = () => {
                 </a>
               </Magnetic>
               <a
-                href="mailto:otc@satoriresearch.io"
+                href="mailto:contact@srventures.io"
                 className="font-dmSans text-[#FAF8F7]/80 hover:text-[#FAF8F7] text-[16px] font-semibold underline-offset-4 hover:underline transition-colors duration-200"
               >
-                otc@satoriresearch.io
+                contact@srventures.io
               </a>
             </div>
           </Reveal>

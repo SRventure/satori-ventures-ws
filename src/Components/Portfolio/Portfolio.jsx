@@ -65,7 +65,7 @@ const Portfolio = () => {
                 >
                   <img
                     src={company.logo}
-                    alt={`${company.name} — Satori Ventures portfolio`}
+                    alt={`${company.name} — Satori.Ventures portfolio`}
                     loading="lazy"
                     className="h-9 w-full object-contain opacity-55 transition duration-300 group-hover:opacity-0 group-focus-visible:opacity-0"
                   />

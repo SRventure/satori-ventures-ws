@@ -10,7 +10,7 @@ const GlobeFallback = () => {
           boxShadow: '0 0 80px 10px rgba(155, 9, 1, 0.30), inset 0 0 60px 0 rgba(155, 9, 1, 0.10)',
         }}
         role='img'
-        aria-label='Satori Ventures global presence'
+        aria-label='Satori.Ventures global presence'
       />
     </div>
   );
