@@ -1,63 +1,40 @@
 import Container from '../Container/Container';
-import { FiDollarSign } from "react-icons/fi";
-import { HiOutlineHashtag } from "react-icons/hi";
-import CountUp from 'react-countup';
+import Reveal from '../../motion/Reveal';
+import Counter from '../../motion/Counter';
+
+const stats = [
+  { end: 128, suffix: '+', label: 'Investments', sub: 'Since 2022', highlight: true },
+  { end: 20, prefix: '$', suffix: 'M+', label: 'Capital deployed', sub: 'Across Web3 & AI' },
+  { end: 26, suffix: '', label: 'Portfolio companies', sub: 'Featured below' },
+  { end: 15, suffix: '+', label: 'Sectors', sub: 'From L1s to robotics' },
+];
 
 const Innovation = () => {
   return (
-    <div className='bg-[#F6F4F2]'>
+    <section className="bg-[#F6F4F2] border-y border-[#441611]/[0.06]">
       <Container>
-        {/* Section heading info */}
-        <div className='py-[109px]'>
-          <p className='font-dmSans text-[#5D423F] w-[95%] md:w-[65%] xl:w-[62%] 2xl:w-[40%] mx-auto text-center text-[21px]'>Where ideas ignite, innovation takes flight, breaking the old chains, in decentralized domains – we champion the creators, share ownerships, and decentralize the gains</p>
+        <div className="py-20 md:py-24">
+          <Reveal>
+            <p className="font-dmSerifDisplay text-[#441611] text-[22px] md:text-[26px] leading-snug text-center max-w-[720px] mx-auto">
+              Where ideas ignite, innovation takes flight — we champion the creators,
+              share ownership, and decentralize the gains.
+            </p>
+          </Reveal>
 
-          {/* Cards  */}
-          <div className='md:flex justify-center gap-6 mt-10 px-3'>
-            <div className='flex justify-around items-center bg-white md:w-[450px] xl:w-[507px] h-[150px] rounded-xl mb-6 md:mb-0' data-aos="fade-right" data-aos-easing="linear" data-aos-duration="1000">
-              <div>
-                <CountUp start={0}
-                  end={20}
-                  duration={4}
-                  separator=" "
-                  suffix=" Million USD+"
-                  className="text-[31px] text-[#441611] font-bold mb-2"
-                />
-                <p className='font-inter text-[#5D423F] text-[17px]'>Investment in USD</p>
-              </div>
-
-              <div className='relative'>
-                <div className='bg-[#441611] w-14 h-14 rounded-full flex justify-center items-center'>
-                  <FiDollarSign className='text-[32px] text-white' />
-                </div>
-                <div className="animate-ping absolute top-2 left-2 inline-flex h-10 w-10 bg-[#441611] rounded-full opacity-50"></div>
-              </div>
-            </div>
-
-            <div className='flex justify-around items-center bg-white  md:w-[450px] xl:w-[507px] h-[150px] rounded-xl' data-aos="fade-left" data-aos-easing="linear" data-aos-duration="1000">
-              <div>
-                <CountUp
-                  start={0}
-                  end={128}
-                  duration={4}
-                  separator=" "
-                  suffix="+ (Since 2022)"
-                  className="text-[31px] text-[#441611] font-bold mb-2"
-                />
-                <p className='font-inter text-[#5D423F] text-[17px]'>Number of Investments</p>
-              </div>
-
-              <div className="relative">
-                <div className='bg-[#441611] w-14 h-14 rounded-full flex justify-center items-center'>
-                  <HiOutlineHashtag className='text-[32px] text-white' />
-                </div>
-                <div className="animate-ping absolute top-2 left-2 inline-flex h-10 w-10 bg-[#441611] rounded-full opacity-50"></div>
-              </div>
-
-            </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 mt-16 lg:divide-x lg:divide-[#441611]/10">
+            {stats.map((s, i) => (
+              <Reveal key={s.label} delay={i * 0.1} className="text-center px-4">
+                <p className={`font-dmSerifDisplay text-[44px] md:text-[56px] leading-none ${s.highlight ? 'text-[#9B0801]' : 'text-[#441611]'}`}>
+                  <Counter end={s.end} prefix={s.prefix || ''} suffix={s.suffix} />
+                </p>
+                <p className="font-inter text-[13px] font-semibold uppercase tracking-[0.16em] text-[#441611] mt-4">{s.label}</p>
+                <p className="font-dmSans text-[14px] text-[#6F5D5B]/80 mt-1">{s.sub}</p>
+              </Reveal>
+            ))}
           </div>
         </div>
       </Container>
-    </div>
+    </section>
   );
 };
 

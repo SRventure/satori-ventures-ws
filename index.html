@@ -11,9 +11,15 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <link rel="preconnect" href="https://fonts.googleapis.com" />
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-   <link rel="stylesheet"
+   <!-- Async font CSS: non-blocking first paint, swaps in when ready -->
+   <link rel="preload" as="style"
       href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" />
-   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+   <link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" />
+   <noscript>
+      <link rel="stylesheet"
+         href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" />
+   </noscript>
 
    <title>Satori Ventures — Fostering the Blockchain Renaissance</title>
    <meta name="description" content="Satori Ventures is a venture capital firm investing in transformative Web3, blockchain, and AI companies. We back the potential of tomorrow." />
@@ -87,27 +93,38 @@
 </head>
 
 <body>
-   <div id="root"></div>
+   <div id="root">
+      <!-- Static hero shell: painted before React loads (LCP), replaced on mount.
+           Markup/classes mirror NavBar + Banner so the takeover is seamless. -->
+      <div>
+         <div class="h-[75px] md:h-[85px]"></div>
+         <section class="relative overflow-hidden">
+            <div class="max-w-[2520px] mx-auto xl:px-40 md:px-16 sm:px-2 px-4">
+               <div class="flex flex-col md:flex-row items-center justify-between gap-y-12 pt-14 md:pt-20 pb-20 md:pb-28">
+                  <div class="md:w-1/2">
+                     <p class="eyebrow mb-5">Venture Capital · Web3 · Blockchain · AI</p>
+                     <h1 class="font-dmSerifDisplay text-[#441611] text-[44px] leading-[1.08] md:text-[64px] xl:text-[72px]">
+                        <span class="block">Fostering</span>
+                        <span class="block">the <span class="text-[#9B0801]">Blockchain</span></span>
+                        <span class="block">Renaissance</span>
+                     </h1>
+                     <p class="font-dmSans text-[#6F5D5B] text-[17px] md:text-[18px] leading-relaxed max-w-[420px] mt-6">
+                        We back founders building the transformative layer of the internet —
+                        across Web3, blockchain infrastructure, and frontier AI.</p>
+                  </div>
+                  <div class="md:w-1/2">
+                     <div class="md:-mt-8 md:ml-20 flex justify-center items-center">
+                        <div class="rounded-full"
+                           style="width:min(550px,80vw);height:min(550px,80vw);background:radial-gradient(circle at 35% 30%, #f7f3f1 0%, #efe8e5 60%, #e7dcd9 100%);box-shadow:0 0 80px 10px rgba(155,9,1,0.30), inset 0 0 60px 0 rgba(155,9,1,0.10)">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+      </div>
+   </div>
    <script type="module" src="/src/main.jsx"></script>
-   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-   <script>
-      AOS.init({
-         disable: function () {
-            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-         },
-      });
-   </script>
-
-   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-   </script>
-   <script type="text/javascript">
-      (function () {
-         emailjs.init({
-            publicKey: "RElQ17WxbehSv1AID",
-         });
-      })();
-   </script>
-
 </body>
 
 </html>

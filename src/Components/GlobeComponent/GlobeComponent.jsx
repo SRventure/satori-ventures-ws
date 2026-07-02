@@ -1,9 +1,34 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import Globe from 'react-globe.gl';
 
 const GlobeComponent = () => {
   const [countries, setCountries] = useState({ features: [] });
+  const globeRef = useRef();
+  const wrapRef = useRef();
+
+  useEffect(() => {
+    const controls = globeRef.current?.controls();
+    if (controls) {
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.55;
+      controls.enableZoom = false;
+    }
+  }, []);
+
+  // Pause the render loop whenever the globe is scrolled out of view.
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(([entry]) => {
+      const g = globeRef.current;
+      if (!g) return;
+      if (entry.isIntersecting) g.resumeAnimation();
+      else g.pauseAnimation();
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const globeMaterial = useMemo(
     () =>
@@ -16,16 +41,6 @@ const GlobeComponent = () => {
     []
   );
 
-  const myData = [
-    {
-      longitude: -122.4194,
-      latitude: 37.7749,
-      label: 'San Francisco',
-      color: 'red',
-      altitude: 0.2,
-    },
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,7 +50,6 @@ const GlobeComponent = () => {
         }
         const data = await response.json();
         setCountries(data);
-        // console.log(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -44,16 +58,17 @@ const GlobeComponent = () => {
   }, []);
 
   return (
-    <div className='md:-mt-8 md:ml-20 heroImg'>
+    <div ref={wrapRef} className='md:-mt-8 md:ml-20 heroImg'>
       <Globe
+        ref={globeRef}
         width={550}
         height={550}
-        pointsData={myData}
-        backgroundColor='#fff'
+        backgroundColor='rgba(0,0,0,0)'
         showGraticules={true}
         atmosphereColor='#9b0901f8'
         atmosphereAltitude='0.25'
         globeMaterial={globeMaterial}
+        rendererConfig={{ antialias: false, powerPreference: 'low-power' }}
 
         hexPolygonsData={countries.features}
         hexPolygonResolution={3}

@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { lazy, Suspense } from 'react';
+import SmoothScroll from './motion/SmoothScroll';
+import NavBar from './shared/NavBar/NavBar';
+import Footer from './shared/Footer/Footer';
+import Home from './Pages/Home/Home';
 
-function App() {
-  const [count, setCount] = useState(0)
+const NotFound = lazy(() => import('./Pages/NotFound/NotFound'));
+
+// Single-page site: no router needed. Vercel rewrites all paths to
+// index.html, so unknown paths render the lightweight 404 chunk.
+const App = () => {
+  if (window.location.pathname !== '/') {
+    return (
+      <Suspense fallback={null}>
+        <NotFound />
+      </Suspense>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <SmoothScroll />
+      <NavBar />
+      <Home />
+      <Footer />
+    </div>
+  );
+};
 
-export default App
+export default App;

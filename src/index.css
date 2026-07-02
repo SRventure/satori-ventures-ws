@@ -2,24 +2,112 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    scroll-behavior: smooth;
+}
 
+body {
+    background-color: #FAF8F7;
+    color: #6F5D5B;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: #9B0801;
+    color: #FAF8F7;
+}
+
+:focus-visible {
+    outline: 2px solid #9B0801;
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* Eyebrow label — small red uppercase, letter-spaced */
+.eyebrow {
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #9B0801;
+}
+
+/* Hero globe float */
 .heroImg {
-    animation-name: floating;
-    animation-duration: 3s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
+    animation: floating 6s ease-in-out infinite;
 }
 
 @keyframes floating {
-    0% {
-        transform: translate(0, 0px);
+    0%, 100% {
+        transform: translateY(0);
     }
 
     50% {
-        transform: translate(0, 10px);
+        transform: translateY(12px);
+    }
+}
+
+/* Logo marquee — CSS-driven, off the main thread */
+.marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.marquee-track {
+    animation: marquee var(--marquee-duration, 38s) linear infinite;
+}
+
+.marquee-mask:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+@keyframes marquee {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* Animated underline for nav links */
+.nav-underline {
+    position: relative;
+}
+
+.nav-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 1.5px;
+    background: #9B0801;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-underline:hover::after,
+.nav-underline.is-active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
     }
 
-    100% {
-        transform: translate(0, -0px)
+    .heroImg {
+        animation: none;
+    }
+
+    .marquee-track {
+        animation: none;
+    }
+
+    .nav-underline::after {
+        transition: none;
     }
 }

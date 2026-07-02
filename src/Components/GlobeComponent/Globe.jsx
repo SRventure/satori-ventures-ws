@@ -4,17 +4,28 @@ import GlobeFallback from './GlobeFallback';
 
 const GlobeComponent = lazy(() => import('./GlobeComponent'));
 
-// Show the lightweight CSS fallback as the LCP element, then mount the heavy
-// WebGL globe once the browser is idle so it doesn't block first paint.
+// The CSS fallback is the LCP element. The heavy WebGL globe only mounts on
+// the first user interaction (then idle), so first paint / TBT stay clean —
+// a real visitor's first mouse-move or touch brings it in immediately.
 const Globe = () => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (reduce) return; // honor reduced-motion: keep the static fallback
-    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1200));
-    const id = idle(() => setReady(true), { timeout: 2500 });
-    return () => (window.cancelIdleCallback || clearTimeout)(id);
+
+    const events = ['pointermove', 'pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'];
+    let idleId;
+    const arm = () => {
+      events.forEach((ev) => window.removeEventListener(ev, arm));
+      const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 800));
+      idleId = idle(() => setReady(true), { timeout: 2000 });
+    };
+    events.forEach((ev) => window.addEventListener(ev, arm, { passive: true, once: false }));
+    return () => {
+      events.forEach((ev) => window.removeEventListener(ev, arm));
+      if (idleId) (window.cancelIdleCallback || clearTimeout)(idleId);
+    };
   }, []);
 
   if (!ready) return <GlobeFallback />;

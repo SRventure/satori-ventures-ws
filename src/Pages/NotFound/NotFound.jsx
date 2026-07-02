@@ -1,5 +1,4 @@
 import { FaArrowLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import image from "../../assets/our thesis/404_Not-found.png"
 
 const NotFound = () => {
@@ -12,7 +11,7 @@ const NotFound = () => {
           </div>
           <h1 className="text-4xl text-[#7e7b7b] font-dmSerifDisplay -mt-5 -mb-3">Oops! <br />Page not found</h1>
           <p className="text-[#999595] py-6">The page you are looking for could not be found.</p>
-          <Link to="/" className="btn bg-[#DAA59F] hover:bg-[#c2918d] text-[15px] group"> <FaArrowLeft className=' group-hover:mr-1 duration-200' /> Back to Home</Link>
+          <a href="/" className="btn bg-[#DAA59F] hover:bg-[#c2918d] text-[15px] group"> <FaArrowLeft className=' group-hover:mr-1 duration-200' /> Back to Home</a>
         </div>
       </div>
     </div>
