@@ -116,6 +116,21 @@ const Banner = () => {
               <span className="mx-3 text-[#441611]/20">|</span>
               Global reach, rooted in Asia
             </m.p>
+
+            <m.div
+              className="hidden md:flex items-center gap-3 mt-12"
+              initial={reduce ? false : { y: 12 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8, ease: EASE, delay: 0.8 }}
+              aria-hidden="true"
+            >
+              <span className="scroll-cue-track">
+                <span className="scroll-cue-dash" />
+              </span>
+              <span className="font-inter text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6F5D5B]/70">
+                Scroll to explore
+              </span>
+            </m.div>
           </m.div>
 
           <m.div className="md:w-1/2" style={reduce ? undefined : { y: globeY }}>
