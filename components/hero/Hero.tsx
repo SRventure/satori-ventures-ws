@@ -11,6 +11,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 import { useReducedMotion } from "@/components/providers/Providers";
 
 const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
+const MouseGlow = dynamic(() => import("./MouseGlow"), { ssr: false });
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -22,10 +23,12 @@ export default function Hero() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  // section is 160svh; the inner 100svh block is sticky, so the hero stays
+  // pinned ~60svh of scroll while text fades and the field scales up
+  const textY = useTransform(scrollYProgress, [0, 0.45], [0, 90]);
+  const fade = useTransform(scrollYProgress, [0.02, 0.38], [1, 0]);
   const fieldScale = useTransform(scrollYProgress, [0, 1], [1, 1.22]);
-  const fieldFade = useTransform(scrollYProgress, [0, 0.85], [1, 0.15]);
+  const fieldFade = useTransform(scrollYProgress, [0, 0.6], [1, 0.12]);
 
   useEffect(() => {
     if (document.documentElement.getAttribute("data-loaded") !== "false") {
@@ -50,11 +53,8 @@ export default function Hero() {
   });
 
   return (
-    <section
-      ref={ref}
-      id="home"
-      className="relative flex min-h-[100svh] items-end overflow-hidden pb-24 pt-[120px] md:items-center md:pb-0 md:pt-0"
-    >
+    <section ref={ref} id="home" className={`relative ${reduce ? "" : "h-[160svh]"}`}>
+      <div className="sticky top-0 flex min-h-[100svh] items-end overflow-hidden pb-24 pt-[120px] md:items-center md:pb-0 md:pt-0">
       <motion.div
         aria-hidden="true"
         className="absolute inset-0"
@@ -63,6 +63,7 @@ export default function Hero() {
         <ParticleField />
       </motion.div>
       {!reduce && <Spotlight />}
+      <MouseGlow />
 
       <motion.div
         style={reduce ? undefined : { y: textY, opacity: fade }}
@@ -148,6 +149,7 @@ export default function Hero() {
           <ChevronDown className="chevron-pulse h-4 w-4 text-gold" />
           Scroll to continue
         </span>
+      </div>
       </div>
     </section>
   );

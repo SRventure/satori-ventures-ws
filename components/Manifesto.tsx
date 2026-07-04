@@ -1,6 +1,7 @@
 "use client";
 
 import { TextReveal } from "@/components/ui/text-reveal";
+import { Parallax } from "@/components/ui/parallax";
 import Scramble from "@/components/Scramble";
 
 const QUOTE =
@@ -10,11 +11,13 @@ export default function Manifesto() {
   return (
     <section id="manifesto" className="relative">
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div
+        <Parallax
+          speed={0.2}
           className="absolute left-[6%] top-[12%] h-[440px] w-[440px] rounded-full opacity-[0.10]"
           style={{ background: "radial-gradient(circle, rgb(var(--accent-gold)) 0%, transparent 62%)" }}
         />
-        <div
+        <Parallax
+          speed={0.55}
           className="absolute right-[4%] top-[55%] h-[520px] w-[520px] rounded-full opacity-[0.07]"
           style={{ background: "radial-gradient(circle, rgb(var(--accent-red)) 0%, transparent 62%)" }}
         />

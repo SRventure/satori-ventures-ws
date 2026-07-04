@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Parallax } from "@/components/ui/parallax";
 import { useReducedMotion } from "@/components/providers/Providers";
 
 export default function KineticWord({ word = "RENAISSANCE" }: { word?: string }) {
@@ -20,11 +21,13 @@ export default function KineticWord({ word = "RENAISSANCE" }: { word?: string })
       aria-label={word}
     >
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div
+        <Parallax
+          speed={0.25}
           className="absolute -left-[10%] top-1/2 h-[420px] w-[62%] -translate-y-1/2 rounded-full opacity-[0.14] blur-3xl"
           style={{ background: "radial-gradient(ellipse, rgb(var(--accent-gold)) 0%, transparent 65%)" }}
         />
-        <div
+        <Parallax
+          speed={0.6}
           className="absolute -right-[8%] top-1/2 h-[360px] w-[48%] -translate-y-1/2 rounded-full opacity-[0.10] blur-3xl"
           style={{ background: "radial-gradient(ellipse, rgb(var(--accent-red)) 0%, transparent 65%)" }}
         />

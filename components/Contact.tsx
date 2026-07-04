@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Magnetic from "@/components/Magnetic";
 import VerticalCutReveal from "@/components/ui/vertical-cut-reveal";
+import { Parallax } from "@/components/ui/parallax";
 import { useReducedMotion } from "@/components/providers/Providers";
 
 const SERVICE_ID =
@@ -36,7 +37,8 @@ export default function Contact() {
 
   return (
     <section id="contact" className="hairline-t relative overflow-hidden py-28 md:py-40">
-      <div
+      <Parallax
+        speed={0.3}
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 opacity-[0.08]"
         style={{ background: "radial-gradient(ellipse, rgb(var(--accent-gold)) 0%, rgb(var(--accent-red)) 38%, transparent 62%)" }}

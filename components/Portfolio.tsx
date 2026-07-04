@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -161,9 +162,16 @@ export default function Portfolio() {
           }`}
         >
           {companies.map((c, i) => (
-            <div key={c.name} className={horizontal ? "" : "snap-start"}>
+            <motion.div
+              key={c.name}
+              className={horizontal ? "" : "snap-start"}
+              initial={{ opacity: 0, x: 80 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: (i % 5) * 0.05 }}
+            >
               <Card c={c} index={i} hovered={hovered === i} onHover={setHovered} />
-            </div>
+            </motion.div>
           ))}
         </div>
 
