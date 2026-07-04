@@ -41,9 +41,15 @@ export const metadata: Metadata = {
     title: "Satori.Ventures — Fostering the Blockchain Renaissance",
     description:
       "A venture capital firm investing in transformative Web3, blockchain, and AI companies.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "/og-card.png", width: 1200, height: 630 }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: {
+    card: "summary_large_image",
+    title: "Satori.Ventures — Fostering the Blockchain Renaissance",
+    description:
+      "A venture capital firm investing in transformative Web3, blockchain, and AI companies.",
+    images: ["/og-card.png"],
+  },
   icons: {
     icon: [
       { url: "/favicon-32x32.png", sizes: "32x32" },
