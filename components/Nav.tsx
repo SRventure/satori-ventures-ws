@@ -64,7 +64,7 @@ export default function Nav() {
             alt=""
             width={30}
             height={35}
-            className="company-logo transition-opacity duration-300 group-hover:opacity-80"
+            className="transition-opacity duration-300 group-hover:opacity-80"
             priority
           />
           <span className="font-display text-[17px] font-bold uppercase tracking-[0.08em] text-ink transition-colors duration-300 group-hover:text-gold">
