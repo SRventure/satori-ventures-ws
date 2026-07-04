@@ -9,6 +9,7 @@ import VerticalCutReveal from "@/components/ui/vertical-cut-reveal";
 import { FlipWords } from "@/components/ui/flip-words";
 import { Spotlight } from "@/components/ui/spotlight";
 import { useReducedMotion } from "@/components/providers/Providers";
+import { StatusChip } from "@/components/ui/hud";
 
 const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
 const MouseGlow = dynamic(() => import("./MouseGlow"), { ssr: false });
@@ -70,22 +71,22 @@ export default function Hero() {
         className="relative z-[2] mx-auto grid w-full max-w-wide grid-cols-1 gap-10 px-6 md:grid-cols-[1.5fr_1fr] md:items-center md:gap-16 md:px-10"
       >
         <div>
-          <motion.p className="eyebrow eyebrow-tick mb-7" {...enter(0.15)}>
-            Satori Ventures — Est. 2022
-          </motion.p>
+          <motion.div className="mb-8" {...enter(0.15)}>
+            <StatusChip>Satori Ventures // Est. 2022 // Online</StatusChip>
+          </motion.div>
 
-          <h1 className="display-xl text-[clamp(46px,9.6vw,132px)]">
+          <h1 className="display-xl !normal-case text-[clamp(48px,9.8vw,136px)] !leading-[0.95]">
             {ready || reduce ? (
               <>
                 <span className="block">
-                  <VerticalCutReveal delay={0.2}>ISN'T JUST</VerticalCutReveal>
+                  <VerticalCutReveal delay={0.2}>This isn't</VerticalCutReveal>
                 </span>
                 <span className="block text-gold">
-                  <VerticalCutReveal delay={0.45}>CAPITAL.</VerticalCutReveal>
+                  <VerticalCutReveal delay={0.45}>just capital.</VerticalCutReveal>
                 </span>
               </>
             ) : (
-              <span className="opacity-0">ISN'T JUST CAPITAL.</span>
+              <span className="opacity-0">This isn't just capital.</span>
             )}
           </h1>
 
@@ -124,16 +125,18 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* ORYZO-style side annotation */}
-        <motion.aside className="hidden max-w-[300px] md:block" {...enter(1.4)}>
-          <p className="annotation">
-            Satori isn't just a fund. It's the result of unprecedented conviction
-            in the internet's next layer<span className="text-crimson">*</span>
+        {/* Stark-style glass quote card */}
+        <motion.aside className="glass-card hidden max-w-[330px] p-7 md:block" {...enter(1.4)}>
+          <p className="font-sans text-[15px] leading-relaxed text-ink">
+            &ldquo;Satori isn&apos;t just a fund. It&apos;s the result of
+            unprecedented conviction in the internet&apos;s next
+            layer.&rdquo;
           </p>
-          <p className="mt-6 font-display text-[12px] font-semibold uppercase tracking-[0.2em] text-ink-2">
-            <span className="text-gold">*128+</span> investments since 2022
-            <br />
-            Global reach, rooted in Asia
+          <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
+            Satori Ventures — Est. 2022
+          </p>
+          <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-2">
+            128+ investments // Rooted in Asia
           </p>
         </motion.aside>
       </motion.div>

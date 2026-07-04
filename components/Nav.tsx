@@ -90,6 +90,13 @@ export default function Nav() {
           >
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
+          <a
+            href="#contact"
+            onClick={(e) => scrollToAnchor(e, "#contact")}
+            className="engage-pill"
+          >
+            Engage <span aria-hidden="true">↗</span>
+          </a>
         </div>
 
         <div className="flex items-center gap-3 md:hidden">

@@ -5,34 +5,40 @@
 /* ---------- design tokens (RGB triplets for Tailwind alpha) ---------- */
 :root,
 html[data-theme="dark"] {
-  --bg-primary: 10 10 15;        /* #0A0A0F */
-  --bg-secondary: 18 18 26;      /* #12121A */
-  --accent-gold: 212 175 55;     /* #D4AF37 */
-  --accent-red: 193 18 46;       /* #C1122E crimson */
+  /* Stark-HUD: near-black, deep red + metallic gold */
+  --bg-primary: 5 5 8;           /* #050508 */
+  --bg-secondary: 12 12 17;      /* #0C0C11 */
+  --accent-gold: 226 184 76;     /* #E2B84C metallic gold */
+  --accent-red: 214 31 51;       /* #D61F33 arc red */
   --accent-cyan: 0 240 255;      /* #00F0FF */
-  --text-primary: 248 248 246;   /* near-white, high contrast */
-  --text-secondary: 178 178 186; /* #B2B2BA — readable gray */
-  --text-muted: 110 110 118;
+  --text-primary: 250 250 248;
+  --text-secondary: 176 176 184;
+  --text-muted: 108 108 116;
   --logo-filter: brightness(0) invert(0.92);
-  --glass: rgba(10, 10, 15, 0.72);
-  --grain-opacity: 0.05;
-  --hairline: rgb(74 74 74 / 0.35);
+  --glass: rgba(8, 8, 12, 0.66);
+  --grain-opacity: 0.045;
+  --hairline: rgb(120 120 130 / 0.22);
+  --grid-line: rgb(255 255 255 / 0.030);
+  --hud-ink: rgb(226 184 76 / 0.75);
   color-scheme: dark;
 }
 
 html[data-theme="light"] {
-  --bg-primary: 250 247 242;     /* warm ivory */
-  --bg-secondary: 255 255 255;
-  --accent-gold: 158 122 26;     /* deepened gold, AA on ivory */
-  --accent-red: 139 14 34;       /* #8B0E22 oxblood, AA on ivory */
-  --accent-cyan: 8 122 138;      /* deepened teal */
-  --text-primary: 16 16 20;
-  --text-secondary: 74 74 84;
-  --text-muted: 150 146 138;
-  --logo-filter: brightness(0) opacity(0.82);
-  --glass: rgba(250, 247, 242, 0.78);
-  --grain-opacity: 0.035;
-  --hairline: rgb(20 20 26 / 0.14);
+  /* Luxury VC: red + white — pure white, crimson, near-black ink */
+  --bg-primary: 255 255 255;
+  --bg-secondary: 249 248 248;   /* faint warm-neutral panel */
+  --accent-gold: 132 32 42;      /* muted garnet — "gold" slot reads red-lux on white */
+  --accent-red: 168 16 32;       /* #A81020 crimson, AA on white */
+  --accent-cyan: 8 122 138;
+  --text-primary: 17 16 18;
+  --text-secondary: 88 86 90;
+  --text-muted: 158 154 156;
+  --logo-filter: brightness(0) opacity(0.85);
+  --glass: rgba(255, 255, 255, 0.8);
+  --grain-opacity: 0.028;
+  --hairline: rgb(20 18 20 / 0.12);
+  --grid-line: rgb(17 16 18 / 0.035);
+  --hud-ink: rgb(168 16 32 / 0.65);
   color-scheme: light;
 }
 
@@ -109,9 +115,9 @@ body {
   transform: scaleX(1);
 }
 
-/* ---------- eyebrow ---------- */
+/* ---------- eyebrow (mono telemetry label, Stark HUD) ---------- */
 .eyebrow {
-  @apply font-display text-[13px] font-semibold uppercase tracking-[0.28em] text-gold;
+  @apply font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-gold;
 }
 
 /* ---------- ORYZO-style display type ---------- */
@@ -134,7 +140,7 @@ body {
 
 /* scroll-to-continue chapter marker */
 .scroll-continue {
-  @apply inline-flex items-center gap-2 font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-ink-2;
+  @apply inline-flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.26em] text-ink-2;
 }
 
 /* ---------- underline form inputs ---------- */
@@ -221,9 +227,88 @@ body {
   background: rgb(var(--accent-red));
 }
 
+/* ---------- Stark-HUD chrome ---------- */
+/* faint blueprint grid over the whole page */
+.hud-grid::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* mono telemetry micro-label */
+.hud-label {
+  @apply font-mono text-[10px] uppercase;
+  letter-spacing: 0.22em;
+  color: var(--hud-ink);
+}
+
+/* L-shaped viewport corner brackets */
+.hud-corner {
+  position: fixed;
+  width: 26px;
+  height: 26px;
+  z-index: 80;
+  pointer-events: none;
+  border: 0 solid var(--hud-ink);
+}
+.hud-corner-tl { top: 14px; left: 14px; border-top-width: 1px; border-left-width: 1px; }
+.hud-corner-tr { top: 14px; right: 14px; border-top-width: 1px; border-right-width: 1px; }
+.hud-corner-bl { bottom: 14px; left: 14px; border-bottom-width: 1px; border-left-width: 1px; }
+.hud-corner-br { bottom: 14px; right: 14px; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* status-chip pill: ● SATORI VENTURES // ONLINE */
+.status-chip {
+  @apply inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase;
+  letter-spacing: 0.18em;
+  border-color: rgb(var(--accent-gold) / 0.35);
+  color: rgb(var(--text-secondary));
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+}
+.status-chip .chip-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: rgb(var(--accent-red));
+  animation: chip-pulse 2.2s ease-in-out infinite;
+}
+@keyframes chip-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgb(var(--accent-red) / 0.5); }
+  50% { opacity: 0.55; box-shadow: 0 0 0 5px rgb(var(--accent-red) / 0); }
+}
+
+/* glassy quote card */
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgb(var(--text-primary) / 0.10);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 0.18);
+}
+
+/* bordered ENGAGE ↗ pill */
+.engage-pill {
+  @apply inline-flex items-center gap-2 rounded-full border px-5 py-2 font-mono text-[11px] uppercase transition-colors duration-300;
+  letter-spacing: 0.18em;
+  border-color: rgb(var(--accent-gold) / 0.5);
+  color: rgb(var(--text-primary));
+}
+.engage-pill:hover,
+.engage-pill:focus-visible {
+  background: rgb(var(--accent-red));
+  border-color: rgb(var(--accent-red));
+  color: rgb(255 255 255);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .grain::after,
-  .chevron-pulse {
+  .chevron-pulse,
+  .status-chip .chip-dot {
     animation: none;
   }
   html {

@@ -45,6 +45,7 @@ const fragmentShader = /* glsl */ `
   uniform vec3 uColor;
   uniform vec3 uRed;
   uniform float uOpacity;
+  uniform float uRedThresh;
   varying float vSeed;
 
   void main() {
@@ -53,8 +54,8 @@ const fragmentShader = /* glsl */ `
     // warm gold spectrum variation per particle
     vec3 col = uColor * (0.75 + 0.4 * fract(vSeed * 7.31));
     col.b *= 0.85 + 0.3 * fract(vSeed * 3.77);
-    // ~7% crimson embers
-    float redMix = step(0.93, fract(vSeed * 13.77));
+    // crimson embers (fraction set per theme via uRedThresh)
+    float redMix = step(uRedThresh, fract(vSeed * 13.77));
     col = mix(col, uRed * 1.15, redMix);
     gl_FragColor = vec4(col, alpha);
   }
@@ -94,8 +95,8 @@ function EnsoRing({ dark }: { dark: boolean }) {
 
   const uniforms = useMemo(
     () => ({
-      uGold: { value: new THREE.Color("#D4AF37") },
-      uRed: { value: new THREE.Color("#C1122E") },
+      uGold: { value: new THREE.Color("#E2B84C") },
+      uRed: { value: new THREE.Color("#D61F33") },
       uAlpha: { value: 0.85 },
     }),
     []
@@ -117,9 +118,9 @@ function EnsoRing({ dark }: { dark: boolean }) {
     g.rotation.x += (mouse.current.y * 0.35 - g.rotation.x) * 0.045;
     g.rotation.y += (mouse.current.x * 0.5 - g.rotation.y) * 0.045;
     g.position.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.12;
-    mat.current.uniforms.uGold.value.set(dark ? "#D4AF37" : "#9E7A1A");
-    mat.current.uniforms.uRed.value.set(dark ? "#C1122E" : "#8B0E22");
-    mat.current.uniforms.uAlpha.value = dark ? 0.85 : 0.6;
+    mat.current.uniforms.uGold.value.set(dark ? "#E2B84C" : "#84202A");
+    mat.current.uniforms.uRed.value.set(dark ? "#D61F33" : "#A81020");
+    mat.current.uniforms.uAlpha.value = dark ? 0.85 : 0.55;
   });
 
   return (
@@ -182,9 +183,10 @@ function Particles({ dark }: { dark: boolean }) {
       uMouse: { value: new THREE.Vector2(-100, -100) },
       uRepelRadius: { value: 2.1 },
       uRepelStrength: { value: 0.9 },
-      uColor: { value: new THREE.Color("#D4AF37") },
-      uRed: { value: new THREE.Color("#C1122E") },
+      uColor: { value: new THREE.Color("#E2B84C") },
+      uRed: { value: new THREE.Color("#D61F33") },
       uOpacity: { value: 0.55 },
+      uRedThresh: { value: 0.8 },
     }),
     []
   );
@@ -212,9 +214,11 @@ function Particles({ dark }: { dark: boolean }) {
     u.uSpeed.value = 0.28 * (1 + scrollVel.current * 2.0);
     u.uTime.value += delta;
     u.uMouse.value.lerp(mouse.current, 0.12);
-    u.uColor.value.set(dark ? "#D4AF37" : "#9E7A1A");
-    u.uRed.value.set(dark ? "#C1122E" : "#8B0E22");
-    u.uOpacity.value = dark ? 0.55 : 0.4;
+    u.uColor.value.set(dark ? "#E2B84C" : "#84202A");
+    u.uRed.value.set(dark ? "#D61F33" : "#A81020");
+    u.uOpacity.value = dark ? 0.55 : 0.28;
+    // Stark HUD: ~20% red embers in dark, ~35% in the red/white light theme
+    u.uRedThresh.value = dark ? 0.8 : 0.65;
   });
 
   return (

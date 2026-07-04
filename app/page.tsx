@@ -10,12 +10,14 @@ import KineticWord from "@/components/KineticWord";
 import Focus from "@/components/Focus";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import Hud from "@/components/ui/hud";
 
 export default function Home() {
   return (
     <>
       <Preloader />
       <Nav />
+      <Hud />
       <main id="top">
         <Hero />
         <Marquee

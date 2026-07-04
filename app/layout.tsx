@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter, Archivo } from "next/font/google";
+import { Playfair_Display, Inter, Archivo, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import Providers from "@/components/providers/Providers";
 import "./globals.css";
@@ -20,6 +20,13 @@ const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-display",
   weight: ["500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
@@ -48,7 +55,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A0A0F",
+  themeColor: "#050508",
 };
 
 const themeInit = `(function(){try{var t=localStorage.getItem('satori-theme');if(t!=='light'&&t!=='dark'){t='dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})()`;
@@ -59,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
-      <body className={`${playfair.variable} ${inter.variable} ${archivo.variable} grain`}>
+      <body className={`${playfair.variable} ${inter.variable} ${archivo.variable} ${jetbrains.variable} grain hud-grid`}>
         <Providers>{children}</Providers>
         <Analytics />
       </body>

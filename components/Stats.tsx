@@ -101,7 +101,7 @@ export default function Stats() {
               </span>
               <div className="md:max-w-[240px] md:text-right">
                 <p className="font-display text-[14px] font-bold uppercase tracking-[0.18em] text-ink">
-                  <span className="mr-2 text-crimson">0{i + 1}</span>
+                  <span className="mr-2 font-mono text-[12px] text-crimson">0{i + 1}</span>
                   {s.label}
                 </p>
                 <p className="mt-2 font-sans text-[15px] leading-relaxed text-ink-2">
