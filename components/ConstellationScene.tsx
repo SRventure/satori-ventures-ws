@@ -143,6 +143,9 @@ function Nodes({
     g.rotation.y += delta * 0.06;
     g.rotation.x = 0.18 + Math.sin(t * 0.2) * 0.02;
     g.position.z = -12 * (1 - entry);
+    // narrow (portrait) viewports: shrink the whole system to fit
+    const fit = state.viewport.aspect < 1 ? 0.55 : 1;
+    g.scale.setScalar(fit);
 
     nodes.forEach((n, i) => {
       const m = meshes.current[i];

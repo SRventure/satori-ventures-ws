@@ -43,11 +43,11 @@ function LayerLabel({
   return (
     <motion.div
       style={{ opacity, x, top }}
-      className={`absolute z-[3] w-[240px] ${
-        side === "left" ? "left-[6%] text-left" : "right-[6%] text-right"
+      className={`absolute z-[3] w-[150px] md:w-[240px] ${
+        side === "left" ? "left-[4%] text-left md:left-[6%]" : "right-[4%] text-right md:right-[6%]"
       }`}
     >
-      <p className="font-display text-[19px] font-black uppercase tracking-[0.04em] text-ink md:text-[24px]">
+      <p className="font-display text-[14px] font-black uppercase tracking-[0.04em] text-ink md:text-[24px]">
         {layer.name}
       </p>
       <motion.span
@@ -56,7 +56,7 @@ function LayerLabel({
           side === "left" ? "origin-left" : "origin-right"
         }`}
       />
-      <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-2">
+      <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-ink-2 md:text-[10px] md:tracking-[0.18em]">
         {layer.note}
       </p>
       {/* dashed connector toward center */}
@@ -88,7 +88,7 @@ export default function SatoriCube() {
   });
 
   useEffect(() => {
-    setWebgl(!reduce && window.innerWidth >= 640);
+    setWebgl(!reduce);
   }, [reduce]);
 
   const headOpacity = useTransform(scrollYProgress, [0.02, 0.1, 0.26, 0.34], [0, 1, 1, 0]);

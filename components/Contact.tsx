@@ -60,7 +60,7 @@ export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   useEffect(() => {
-    setWebgl(!reduce && window.innerWidth >= 1024);
+    setWebgl(!reduce);
   }, [reduce]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -110,7 +110,7 @@ export default function Contact() {
           {/* left: global presence globe */}
           <div className="relative order-2 lg:order-1">
             {webgl && near && (
-              <div className="h-[420px] w-full lg:h-[480px]" data-cursor-hover>
+              <div className="h-[340px] w-full sm:h-[420px] lg:h-[480px]" data-cursor-hover>
                 <Globe dark={theme === "dark"} />
               </div>
             )}

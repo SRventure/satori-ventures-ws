@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useEffect, useMemo, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 /* AI-datacenter stack, bottom → top (labels read top → bottom):
@@ -425,6 +425,16 @@ function Motes({ dark }: { dark: boolean }) {
   );
 }
 
+function Rig() {
+  const camera = useThree((s) => s.camera);
+  const width = useThree((s) => s.size.width);
+  useEffect(() => {
+    camera.position.z = width < 700 ? 10.5 : 7.5;
+    camera.updateProjectionMatrix();
+  }, [camera, width]);
+  return null;
+}
+
 export default function SatoriCubeScene({
   progress,
   dark,
@@ -438,6 +448,7 @@ export default function SatoriCubeScene({
       dpr={[1, 2]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
     >
+      <Rig />
       <AIDC progress={progress} dark={dark} />
       <Motes dark={dark} />
     </Canvas>

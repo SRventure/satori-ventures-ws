@@ -33,7 +33,7 @@ export default function PortfolioConstellation() {
   });
 
   useEffect(() => {
-    setWebgl(!reduce && window.innerWidth >= 1024);
+    setWebgl(!reduce);
   }, [reduce]);
 
   /* section + ref must render on the very first pass (useScroll null-ref rule) */
@@ -60,7 +60,7 @@ export default function PortfolioConstellation() {
           <span className="text-gold">CONVICTION.</span>
         </h2>
         <p className="mt-4 max-w-[300px] font-mono text-[10px] uppercase leading-relaxed tracking-[0.18em] text-ink-2">
-          27 positions in orbit — hover a node, click to visit
+          27 positions in orbit — touch a node, tap to visit
         </p>
       </div>
 
@@ -83,7 +83,7 @@ export default function PortfolioConstellation() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 24 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="glass-card pointer-events-none absolute right-6 top-1/2 z-[3] w-[300px] -translate-y-1/2 p-6 md:right-10"
+            className="glass-card pointer-events-none absolute right-4 top-1/2 z-[3] w-[260px] -translate-y-1/2 p-5 md:right-10 md:w-[300px] md:p-6"
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-crimson">
               {hovered.category}

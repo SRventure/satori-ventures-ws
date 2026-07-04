@@ -142,30 +142,38 @@ export default function Hud() {
   };
 
   return (
-    <div aria-hidden="true" className="pointer-events-none hidden lg:block" style={blurStyle}>
-      <span className="hud-corner hud-corner-tl" />
-      <span className="hud-corner hud-corner-tr" />
-      <span className="hud-corner hud-corner-bl" />
-      <span className="hud-corner hud-corner-br" />
+    <div aria-hidden="true" className="pointer-events-none" style={blurStyle}>
+      <span className="hud-corner hud-corner-tl hidden lg:block" />
+      <span className="hud-corner hud-corner-tr hidden lg:block" />
+      <span className="hud-corner hud-corner-bl hidden lg:block" />
+      <span className="hud-corner hud-corner-br hidden lg:block" />
 
-      {/* side rails */}
-      <span className="hud-label fixed left-[18px] top-1/2 z-[80] origin-left -rotate-90 whitespace-nowrap">
+      {/* side rails (desktop) */}
+      <span className="hud-label fixed left-[18px] top-1/2 z-[80] hidden origin-left -rotate-90 whitespace-nowrap lg:block">
         Sector // <span className="text-gold">{display}</span>
       </span>
-      <span className="hud-label fixed right-[18px] top-1/2 z-[80] flex origin-right rotate-90 items-center gap-2 whitespace-nowrap">
+      <span className="hud-label fixed right-[18px] top-1/2 z-[80] hidden origin-right rotate-90 items-center gap-2 whitespace-nowrap lg:flex">
         <span className="inline-block h-[5px] w-[5px] rounded-full bg-crimson" />
         Conviction {conviction.toFixed(1)}%
       </span>
 
-      {/* bottom telemetry strip */}
-      <span className="hud-label fixed bottom-[18px] left-[52px] z-[80]">
+      {/* bottom telemetry strip (desktop) */}
+      <span className="hud-label fixed bottom-[18px] left-[52px] z-[80] hidden lg:block">
         Satori.Ventures // v2.0
       </span>
-      <span className="hud-label fixed bottom-[18px] left-1/2 z-[80] -translate-x-1/2 tabular-nums">
+      <span className="hud-label fixed bottom-[18px] left-1/2 z-[80] hidden -translate-x-1/2 tabular-nums lg:block">
         S.A.T.O.R.I. // {String(pct).padStart(3, "0")}%
       </span>
-      <span className="hud-label fixed bottom-[18px] right-[52px] z-[80] tabular-nums">
+      <span className="hud-label fixed bottom-[18px] right-[52px] z-[80] hidden tabular-nums lg:block">
         {clock}
+      </span>
+
+      {/* compact mobile telemetry strip */}
+      <span className="hud-label fixed bottom-[12px] left-4 z-[80] lg:hidden">
+        Sector // <span className="text-gold">{display}</span>
+      </span>
+      <span className="hud-label fixed bottom-[12px] right-4 z-[80] tabular-nums lg:hidden">
+        {String(pct).padStart(3, "0")}% // {clock}
       </span>
     </div>
   );

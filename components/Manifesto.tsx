@@ -77,7 +77,7 @@ function Line({
 
   return (
     <p
-      className="display-lg mb-3 text-[clamp(28px,4.9vw,62px)] md:mb-4"
+      className="display-lg mb-3 text-[clamp(22px,4.9vw,62px)] md:mb-4"
       style={{ perspective: 1000 }}
     >
       {/* group chars per word so the browser never wraps mid-word */}
@@ -129,7 +129,7 @@ export default function Manifesto() {
   const [pinned, setPinned] = useState(false);
 
   useEffect(() => {
-    setPinned(!reduce && window.innerWidth >= 640);
+    setPinned(!reduce);
   }, [reduce]);
 
   const { scrollYProgress } = useScroll({
@@ -213,11 +213,11 @@ export default function Manifesto() {
 
           {/* supporting copy: blur-to-sharp */}
           <motion.div
-            className="mt-14 grid gap-8 md:grid-cols-2 md:gap-16"
+            className="mt-8 grid gap-6 md:mt-14 md:grid-cols-2 md:gap-16"
             style={{ opacity: supportOp, filter: supportFilter, y: supportY }}
           >
             {SUPPORT.map((s) => (
-              <p key={s.slice(0, 16)} className="max-w-[520px] font-sans text-[16px] leading-relaxed text-ink">
+              <p key={s.slice(0, 16)} className="max-w-[520px] font-sans text-[14px] leading-relaxed text-ink md:text-[16px]">
                 {s}
               </p>
             ))}
