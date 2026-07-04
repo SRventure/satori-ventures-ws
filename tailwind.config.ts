@@ -8,6 +8,7 @@ const config: Config = {
         bg: "rgb(var(--bg-primary) / <alpha-value>)",
         "bg-2": "rgb(var(--bg-secondary) / <alpha-value>)",
         gold: "rgb(var(--accent-gold) / <alpha-value>)",
+        crimson: "rgb(var(--accent-red) / <alpha-value>)",
         cyan: "rgb(var(--accent-cyan) / <alpha-value>)",
         ink: "rgb(var(--text-primary) / <alpha-value>)",
         "ink-2": "rgb(var(--text-secondary) / <alpha-value>)",

@@ -32,7 +32,7 @@ export default function Footer() {
         <div className="flex items-center gap-3">
           <Image src="/satorl_logo.png" alt="" width={26} height={30} className="company-logo" />
           <span className="font-serif text-[17px] text-ink">
-            Satori<span className="text-gold">.</span>Ventures
+            Satori<span className="text-crimson">.</span>Ventures
           </span>
         </div>
 

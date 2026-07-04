@@ -38,7 +38,7 @@ export default function Contact() {
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 opacity-[0.07]"
-        style={{ background: "radial-gradient(ellipse, rgb(var(--accent-gold)) 0%, transparent 62%)" }}
+        style={{ background: "radial-gradient(ellipse, rgb(var(--accent-gold)) 0%, rgb(var(--accent-red)) 38%, transparent 62%)" }}
       />
       <div className="relative mx-auto w-full max-w-wide px-6 md:px-10">
         <motion.h2
@@ -50,7 +50,7 @@ export default function Contact() {
         >
           Let&apos;s build
           <br />
-          the <span className="italic text-gold">future.</span>
+          the <span className="italic text-gold">future</span><span className="text-crimson">.</span>
         </motion.h2>
 
         <div className="mt-16 grid gap-16 lg:grid-cols-[1fr_420px]">
@@ -96,7 +96,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="group inline-flex items-center gap-2 border border-gold px-10 py-4 font-sans text-[14px] font-medium uppercase tracking-[0.18em] text-gold transition-all duration-300 hover:bg-gold hover:text-bg disabled:opacity-50"
+                  className="group inline-flex items-center gap-2 border border-gold px-10 py-4 font-sans text-[14px] font-medium uppercase tracking-[0.18em] text-gold transition-all duration-300 hover:border-crimson hover:bg-crimson hover:text-white disabled:opacity-50"
                 >
                   {status === "sending" ? "Sending…" : "Start the conversation"}
                   <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

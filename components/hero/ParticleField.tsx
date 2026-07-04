@@ -43,6 +43,7 @@ const vertexShader = /* glsl */ `
 
 const fragmentShader = /* glsl */ `
   uniform vec3 uColor;
+  uniform vec3 uRed;
   uniform float uOpacity;
   varying float vSeed;
 
@@ -52,9 +53,106 @@ const fragmentShader = /* glsl */ `
     // warm gold spectrum variation per particle
     vec3 col = uColor * (0.75 + 0.4 * fract(vSeed * 7.31));
     col.b *= 0.85 + 0.3 * fract(vSeed * 3.77);
+    // ~7% crimson embers
+    float redMix = step(0.93, fract(vSeed * 13.77));
+    col = mix(col, uRed * 1.15, redMix);
     gl_FragColor = vec4(col, alpha);
   }
 `;
+
+/* broken enso ring — gold body, crimson fresnel rim */
+const ensoVertex = /* glsl */ `
+  varying vec3 vNormal;
+  varying vec3 vView;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    vView = normalize(-mv.xyz);
+    gl_Position = projectionMatrix * mv;
+  }
+`;
+
+const ensoFragment = /* glsl */ `
+  uniform vec3 uGold;
+  uniform vec3 uRed;
+  uniform float uAlpha;
+  varying vec3 vNormal;
+  varying vec3 vView;
+  void main() {
+    float fres = pow(1.0 - max(dot(normalize(vNormal), normalize(vView)), 0.0), 2.0);
+    vec3 col = mix(uGold * 0.45, uGold * 1.35, fres);
+    col = mix(col, uRed * 1.2, smoothstep(0.62, 1.0, fres) * 0.85);
+    float alpha = (0.22 + 0.78 * fres) * uAlpha;
+    gl_FragColor = vec4(col, alpha);
+  }
+`;
+
+function EnsoRing({ dark }: { dark: boolean }) {
+  const group = useRef<THREE.Group>(null);
+  const mat = useRef<THREE.ShaderMaterial>(null);
+  const mouse = useRef({ x: 0, y: 0 });
+
+  const uniforms = useMemo(
+    () => ({
+      uGold: { value: new THREE.Color("#D4AF37") },
+      uRed: { value: new THREE.Color("#C1122E") },
+      uAlpha: { value: 0.85 },
+    }),
+    []
+  );
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  useFrame((state, delta) => {
+    if (!group.current || !mat.current) return;
+    const g = group.current;
+    g.rotation.z -= delta * 0.12;
+    g.rotation.x += (mouse.current.y * 0.35 - g.rotation.x) * 0.045;
+    g.rotation.y += (mouse.current.x * 0.5 - g.rotation.y) * 0.045;
+    g.position.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.12;
+    mat.current.uniforms.uGold.value.set(dark ? "#D4AF37" : "#9E7A1A");
+    mat.current.uniforms.uRed.value.set(dark ? "#C1122E" : "#8B0E22");
+    mat.current.uniforms.uAlpha.value = dark ? 0.85 : 0.6;
+  });
+
+  return (
+    <group ref={group} position={[3.4, 0.2, -1.5]} rotation={[0.35, -0.4, 0.6]}>
+      <mesh>
+        <torusGeometry args={[2.7, 0.045, 32, 220, Math.PI * 1.82]} />
+        <shaderMaterial
+          ref={mat}
+          vertexShader={ensoVertex}
+          fragmentShader={ensoFragment}
+          uniforms={uniforms}
+          transparent
+          depthWrite={false}
+          side={THREE.DoubleSide}
+          blending={dark ? THREE.AdditiveBlending : THREE.NormalBlending}
+        />
+      </mesh>
+      {/* inner echo ring */}
+      <mesh rotation={[0.15, 0.2, 1.4]} scale={0.82}>
+        <torusGeometry args={[2.7, 0.014, 24, 200, Math.PI * 1.6]} />
+        <shaderMaterial
+          vertexShader={ensoVertex}
+          fragmentShader={ensoFragment}
+          uniforms={uniforms}
+          transparent
+          depthWrite={false}
+          side={THREE.DoubleSide}
+          blending={dark ? THREE.AdditiveBlending : THREE.NormalBlending}
+        />
+      </mesh>
+    </group>
+  );
+}
 
 function Particles({ dark }: { dark: boolean }) {
   const mat = useRef<THREE.ShaderMaterial>(null);
@@ -85,6 +183,7 @@ function Particles({ dark }: { dark: boolean }) {
       uRepelRadius: { value: 2.1 },
       uRepelStrength: { value: 0.9 },
       uColor: { value: new THREE.Color("#D4AF37") },
+      uRed: { value: new THREE.Color("#C1122E") },
       uOpacity: { value: 0.55 },
     }),
     []
@@ -114,6 +213,7 @@ function Particles({ dark }: { dark: boolean }) {
     u.uTime.value += delta;
     u.uMouse.value.lerp(mouse.current, 0.12);
     u.uColor.value.set(dark ? "#D4AF37" : "#9E7A1A");
+    u.uRed.value.set(dark ? "#C1122E" : "#8B0E22");
     u.uOpacity.value = dark ? 0.55 : 0.4;
   });
 
@@ -168,6 +268,7 @@ export default function ParticleField() {
         gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       >
         <Particles dark={theme === "dark"} />
+        <EnsoRing dark={theme === "dark"} />
       </Canvas>
     </div>
   );

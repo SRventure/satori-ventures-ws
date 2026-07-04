@@ -5,17 +5,24 @@ import { ArrowUpRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { companies, type Company } from "@/lib/companies";
+import Scramble from "@/components/Scramble";
 import { useReducedMotion } from "@/components/providers/Providers";
 
-function Card({ c }: { c: Company }) {
+function Card({ c, index }: { c: Company; index: number }) {
   return (
     <a
       href={c.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative block w-[78vw] shrink-0 select-none overflow-hidden border border-ink-3/30 bg-bg-2 transition-colors duration-500 hover:border-gold/70 sm:w-[420px]"
-      style={{ aspectRatio: "16 / 10" }}
+      data-cursor-label="View"
+      className="group relative block w-[78vw] shrink-0 select-none overflow-hidden bg-bg-2 transition-colors duration-500 sm:w-[420px]"
+      style={{ aspectRatio: "16 / 10", border: "1px solid var(--hairline)" }}
     >
+      {/* index */}
+      <span className="absolute left-5 top-4 font-sans text-[11px] tracking-[0.2em] text-ink-3 transition-colors duration-300 group-hover:text-crimson">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
       {/* logo plate */}
       <div className="flex h-[62%] items-center justify-center px-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,12 +36,12 @@ function Card({ c }: { c: Company }) {
 
       {/* glass caption */}
       <div
-        className="absolute inset-x-0 bottom-0 border-t border-ink-3/25 px-6 py-4 backdrop-blur-md"
-        style={{ background: "var(--glass)" }}
+        className="absolute inset-x-0 bottom-0 px-6 py-4 backdrop-blur-md"
+        style={{ background: "var(--glass)", borderTop: "1px solid var(--hairline)" }}
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-sans text-[11px] font-medium uppercase tracking-[0.22em] text-gold">
+            <p className="font-sans text-[11px] font-medium uppercase tracking-[0.22em] text-crimson">
               {c.category}
             </p>
             <p className="mt-1 font-serif text-[22px] leading-tight text-ink">{c.name}</p>
@@ -46,11 +53,14 @@ function Card({ c }: { c: Company }) {
         </p>
       </div>
 
-      {/* gold glow on hover */}
+      {/* gold–crimson glow on hover */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ boxShadow: "inset 0 0 60px rgb(var(--accent-gold) / 0.12)" }}
+        style={{
+          boxShadow:
+            "inset 0 0 60px rgb(var(--accent-gold) / 0.1), inset 0 -24px 60px rgb(var(--accent-red) / 0.07)",
+        }}
       />
     </a>
   );
@@ -101,11 +111,19 @@ export default function Portfolio() {
   return (
     <section ref={sectionRef} id="portfolio" className="relative overflow-hidden py-24 lg:h-screen lg:py-0">
       <div className="flex h-full flex-col justify-center">
-        <div className="mx-auto w-full max-w-wide px-6 md:px-10">
-          <p className="eyebrow mb-4">Portfolio</p>
-          <h2 className="font-serif text-[40px] leading-tight text-ink md:text-[56px]">
-            The companies <span className="italic text-gold">redefining</span> tomorrow
-          </h2>
+        <div className="mx-auto flex w-full max-w-wide items-end justify-between px-6 md:px-10">
+          <div>
+            <p className="eyebrow eyebrow-tick mb-4">
+              <Scramble text="Portfolio" />
+            </p>
+            <h2 className="font-serif text-[40px] leading-tight text-ink md:text-[56px]">
+              The companies <span className="italic text-gold">redefining</span> tomorrow
+            </h2>
+          </div>
+          <p className="hidden shrink-0 pb-2 font-serif text-[15px] italic text-ink-2 md:block">
+            <span className="not-italic text-crimson">26</span> positions — drag through the
+            collection
+          </p>
         </div>
 
         <div
@@ -116,9 +134,9 @@ export default function Portfolio() {
               : "snap-x snap-mandatory overflow-x-auto pb-6 [scrollbar-width:thin]"
           }`}
         >
-          {companies.map((c) => (
+          {companies.map((c, i) => (
             <div key={c.name} className={horizontal ? "" : "snap-start"}>
-              <Card c={c} />
+              <Card c={c} index={i} />
             </div>
           ))}
         </div>

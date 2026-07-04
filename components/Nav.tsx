@@ -68,7 +68,7 @@ export default function Nav() {
             priority
           />
           <span className="font-serif text-[19px] tracking-wide text-ink transition-colors duration-300 group-hover:text-gold">
-            Satori<span className="text-gold">.</span>Ventures
+            Satori<span className="text-crimson">.</span>Ventures
           </span>
         </a>
 
@@ -121,7 +121,7 @@ export default function Nav() {
           >
             <div className="flex h-[72px] items-center justify-between px-6">
               <span className="font-serif text-[19px] text-ink">
-                Satori<span className="text-gold">.</span>Ventures
+                Satori<span className="text-crimson">.</span>Ventures
               </span>
               <button
                 onClick={() => setOpen(false)}
@@ -131,7 +131,13 @@ export default function Nav() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex flex-1 flex-col items-start justify-center gap-2 px-8">
+            <span
+              aria-hidden="true"
+              className="text-stroke-ink pointer-events-none absolute bottom-4 left-0 select-none font-serif text-[26vw] leading-none opacity-40"
+            >
+              Satori
+            </span>
+            <div className="relative flex flex-1 flex-col items-start justify-center gap-2 px-8">
               {LINKS.map((l, i) => (
                 <motion.a
                   key={l.href}
@@ -140,11 +146,14 @@ export default function Nav() {
                     scrollToAnchor(e, l.href);
                     setOpen(false);
                   }}
-                  className="py-3 font-serif text-[44px] text-ink transition-colors hover:text-gold"
+                  className="group flex items-baseline gap-4 py-3 font-serif text-[44px] text-ink transition-colors hover:text-gold"
                   initial={{ y: 36, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.08 + i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 >
+                  <span className="font-sans text-[12px] tracking-[0.2em] text-crimson">
+                    0{i + 1}
+                  </span>
                   {l.label}
                 </motion.a>
               ))}

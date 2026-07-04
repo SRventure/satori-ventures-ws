@@ -1,4 +1,6 @@
 import Nav from "@/components/Nav";
+import Preloader from "@/components/Preloader";
+import Marquee from "@/components/Marquee";
 import Hero from "@/components/hero/Hero";
 import Manifesto from "@/components/Manifesto";
 import Stats from "@/components/Stats";
@@ -10,9 +12,14 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
+      <Preloader />
       <Nav />
       <main id="top">
         <Hero />
+        <Marquee
+          items={["Frontier AI", "Web3 Infrastructure", "Open Economies", "Renaissance"]}
+          className="hairline-t hairline-b"
+        />
         <Manifesto />
         <Stats />
         <Portfolio />

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Scramble from "@/components/Scramble";
 import { useReducedMotion } from "@/components/providers/Providers";
 
 const QUOTE =
@@ -75,7 +76,7 @@ export default function Manifesto() {
         <div
           data-layer="0.6"
           className="absolute right-[4%] top-[42%] h-[560px] w-[560px] rounded-full opacity-[0.06]"
-          style={{ background: "radial-gradient(circle, rgb(var(--accent-cyan)) 0%, transparent 62%)" }}
+          style={{ background: "radial-gradient(circle, rgb(var(--accent-red)) 0%, transparent 62%)" }}
         />
         <div
           data-layer="1"
@@ -86,7 +87,9 @@ export default function Manifesto() {
 
       <div className="sticky top-0 flex h-screen items-center">
         <div className="mx-auto w-full max-w-wide px-6 md:px-10">
-          <p className="eyebrow mb-10">Our Philosophy</p>
+          <p className="eyebrow eyebrow-tick mb-10">
+            <Scramble text="Our Philosophy" />
+          </p>
           <p
             ref={quoteRef}
             className="max-w-[1120px] font-serif text-[clamp(34px,6.4vw,96px)] leading-[1.14] text-ink"

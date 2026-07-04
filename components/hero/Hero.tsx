@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import dynamic from "next/dynamic";
 import Magnetic from "@/components/Magnetic";
+import Scramble from "@/components/Scramble";
 import { useReducedMotion } from "@/components/providers/Providers";
 
 const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
@@ -12,10 +13,12 @@ const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
 function RevealLine({
   text,
   delay,
+  ready,
   className,
 }: {
   text: string;
   delay: number;
+  ready: boolean;
   className?: string;
 }) {
   const reduce = useReducedMotion();
@@ -27,14 +30,14 @@ function RevealLine({
             key={i}
             className="inline-block"
             initial={reduce ? false : { y: "110%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
+            animate={reduce || ready ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
             transition={{
               duration: 0.8,
               ease: [0.22, 1, 0.36, 1],
               delay: delay + i * 0.03,
             }}
           >
-            {ch === " " ? " " : ch}
+            {ch === " " ? "\u00A0" : ch}
           </motion.span>
         ))}
       </span>
@@ -46,6 +49,7 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [ready, setReady] = useState(false);
   const reduce = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
@@ -54,6 +58,19 @@ export default function Hero() {
   });
   const textY = useTransform(scrollYProgress, [0, 1], [0, 120]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  // OYLA-style cinematic push-in on the WebGL layer as you scroll
+  const fieldScale = useTransform(scrollYProgress, [0, 1], [1, 1.22]);
+  const fieldFade = useTransform(scrollYProgress, [0, 0.85], [1, 0.15]);
+
+  useEffect(() => {
+    if (document.documentElement.getAttribute("data-loaded") !== "false") {
+      setReady(true);
+      return;
+    }
+    const on = () => setReady(true);
+    window.addEventListener("satori:loaded", on);
+    return () => window.removeEventListener("satori:loaded", on);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -72,22 +89,29 @@ export default function Hero() {
     return () => window.removeEventListener("mousemove", onMove);
   }, [reduce]);
 
+
   return (
     <section
       ref={ref}
       id="home"
       className="relative flex min-h-[100svh] items-center overflow-hidden"
     >
-      <ParticleField />
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={reduce ? undefined : { scale: fieldScale, opacity: fieldFade }}
+      >
+        <ParticleField />
+      </motion.div>
 
-      {/* mouse glow */}
+      {/* mouse glow — gold core, crimson halo */}
       <div
         ref={glowRef}
         aria-hidden="true"
         className="pointer-events-none fixed left-0 top-0 z-[1] h-[560px] w-[560px] rounded-full opacity-60"
         style={{
           background:
-            "radial-gradient(circle, rgb(var(--accent-gold) / 0.07) 0%, transparent 65%)",
+            "radial-gradient(circle, rgb(var(--accent-gold) / 0.07) 0%, rgb(var(--accent-red) / 0.04) 42%, transparent 65%)",
         }}
       />
 
@@ -96,27 +120,27 @@ export default function Hero() {
         className="relative z-[2] mx-auto w-full max-w-wide px-6 md:px-10"
       >
         <motion.p
-          className="eyebrow mb-8"
+          className="eyebrow eyebrow-tick mb-8"
           initial={reduce ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={reduce || ready ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
         >
-          Venture Capital &middot; Web3 &middot; Blockchain &middot; AI
+          <Scramble text="Venture Capital · Web3 · Blockchain · AI" duration={1100} />
         </motion.p>
 
         <h1
           className="font-serif text-ink text-[13vw] leading-[1.02] sm:text-[80px] lg:text-[104px] xl:text-[118px]"
           aria-label="Fostering the Blockchain Renaissance"
         >
-          <RevealLine text="Fostering the" delay={0.25} />
-          <RevealLine text="Blockchain" delay={0.6} className="text-gold italic" />
-          <RevealLine text="Renaissance" delay={0.95} />
+          <RevealLine text="Fostering the" delay={0.25} ready={ready} />
+          <RevealLine text="Blockchain" delay={0.6} ready={ready} className="text-gold italic" />
+          <RevealLine text="Renaissance" delay={0.95} ready={ready} />
         </h1>
 
         <motion.p
           className="mt-8 max-w-[460px] font-sans text-[16px] font-light leading-relaxed text-ink-2 md:text-[18px]"
           initial={reduce ? false : { opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={reduce || ready ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut", delay: 1.35 }}
         >
           We back founders building the transformative layer of the internet —
@@ -126,13 +150,13 @@ export default function Hero() {
         <motion.div
           className="mt-11 flex flex-wrap items-center gap-5"
           initial={reduce ? false : { opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={reduce || ready ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut", delay: 1.55 }}
         >
           <Magnetic>
             <a
               href="#portfolio"
-              className="group inline-flex items-center gap-2 border border-gold bg-gold/10 px-9 py-4 font-sans text-[14px] font-medium uppercase tracking-[0.18em] text-gold transition-colors duration-300 hover:bg-gold hover:text-bg"
+              className="group inline-flex items-center gap-2 border border-gold bg-gold/10 px-9 py-4 font-sans text-[14px] font-medium uppercase tracking-[0.18em] text-gold transition-all duration-300 hover:border-crimson hover:bg-crimson hover:text-white"
             >
               View Portfolio
               <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -141,9 +165,10 @@ export default function Hero() {
           <Magnetic strength={0.25}>
             <a
               href="#contact"
-              className="nav-link font-sans text-[14px] font-medium uppercase tracking-[0.18em] text-ink-2 transition-colors duration-300 hover:text-ink"
+              className="pill-cta text-ink-2 transition-colors duration-300 hover:text-ink"
             >
               Get in touch
+              <span className="pill-plus text-gold">+</span>
             </a>
           </Magnetic>
         </motion.div>
@@ -151,11 +176,11 @@ export default function Hero() {
         <motion.p
           className="mt-14 font-sans text-[13px] tracking-wide text-ink-2/80"
           initial={reduce ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={reduce || ready ? { opacity: 1 } : {}}
           transition={{ duration: 1, delay: 1.9 }}
         >
           <span className="font-semibold text-gold">128+</span> investments since 2022
-          <span className="mx-3 text-ink-3">|</span>
+          <span className="mx-3 text-crimson">/</span>
           Global reach, rooted in Asia
         </motion.p>
       </motion.div>

@@ -8,6 +8,7 @@ html[data-theme="dark"] {
   --bg-primary: 10 10 15;        /* #0A0A0F */
   --bg-secondary: 18 18 26;      /* #12121A */
   --accent-gold: 212 175 55;     /* #D4AF37 */
+  --accent-red: 193 18 46;       /* #C1122E crimson */
   --accent-cyan: 0 240 255;      /* #00F0FF */
   --text-primary: 245 245 245;   /* #F5F5F5 */
   --text-secondary: 138 138 138; /* #8A8A8A */
@@ -15,6 +16,7 @@ html[data-theme="dark"] {
   --logo-filter: brightness(0) invert(0.92);
   --glass: rgba(10, 10, 15, 0.72);
   --grain-opacity: 0.05;
+  --hairline: rgb(74 74 74 / 0.35);
   color-scheme: dark;
 }
 
@@ -22,6 +24,7 @@ html[data-theme="light"] {
   --bg-primary: 250 247 242;     /* warm ivory */
   --bg-secondary: 255 255 255;
   --accent-gold: 158 122 26;     /* deepened gold, AA on ivory */
+  --accent-red: 139 14 34;       /* #8B0E22 oxblood, AA on ivory */
   --accent-cyan: 8 122 138;      /* deepened teal */
   --text-primary: 20 20 26;
   --text-secondary: 90 90 100;
@@ -29,6 +32,7 @@ html[data-theme="light"] {
   --logo-filter: brightness(0) opacity(0.82);
   --glass: rgba(250, 247, 242, 0.78);
   --grain-opacity: 0.035;
+  --hairline: rgb(20 20 26 / 0.14);
   color-scheme: light;
 }
 
@@ -134,6 +138,64 @@ body {
 }
 .chevron-pulse {
   animation: chevron-pulse 1.8s ease-in-out infinite;
+}
+
+/* ---------- outlined kinetic type ---------- */
+.text-stroke-gold {
+  -webkit-text-stroke: 1px rgb(var(--accent-gold) / 0.55);
+  color: transparent;
+}
+.text-stroke-red {
+  -webkit-text-stroke: 1px rgb(var(--accent-red) / 0.7);
+  color: transparent;
+}
+.text-stroke-ink {
+  -webkit-text-stroke: 1px rgb(var(--text-primary) / 0.28);
+  color: transparent;
+}
+
+/* ---------- hairline dividers (OYLA grid) ---------- */
+.hairline-t { border-top: 1px solid var(--hairline); }
+.hairline-b { border-bottom: 1px solid var(--hairline); }
+.hairline-l { border-left: 1px solid var(--hairline); }
+.hairline-r { border-right: 1px solid var(--hairline); }
+
+/* ---------- discover pill (luxury CTA) ---------- */
+.pill-cta {
+  @apply inline-flex items-center gap-3 font-sans text-[12px] uppercase tracking-[0.28em];
+}
+.pill-cta .pill-plus {
+  @apply flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-500;
+  border-color: rgb(var(--accent-gold) / 0.6);
+}
+.pill-cta:hover .pill-plus {
+  background: rgb(var(--accent-red));
+  border-color: rgb(var(--accent-red));
+  color: rgb(255 255 255);
+  transform: rotate(90deg);
+}
+
+/* ---------- ghost echo text (scroll-stacked serif) ---------- */
+.ghost-echo {
+  position: relative;
+  display: inline-block;
+}
+.ghost-echo > .echo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- red tick before eyebrows ---------- */
+.eyebrow-tick::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  margin-right: 12px;
+  vertical-align: middle;
+  background: rgb(var(--accent-red));
 }
 
 @media (prefers-reduced-motion: reduce) {
