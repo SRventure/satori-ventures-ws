@@ -11,6 +11,7 @@ import Focus from "@/components/Focus";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Hud from "@/components/ui/hud";
+import SatoriCube from "@/components/SatoriCube";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <Hud />
       <main id="top">
         <Hero />
+        <SatoriCube />
         <Marquee
           items={["Frontier AI", "Web3 Infrastructure", "Open Economies", "Renaissance"]}
           className="hairline-t hairline-b"
