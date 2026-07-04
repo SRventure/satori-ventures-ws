@@ -89,12 +89,12 @@ export default function Preloader() {
         </svg>
 
         <div className="absolute inset-0 flex items-center justify-center pb-[72px]">
-          <span className="font-serif text-[28px] tabular-nums text-ink">
+          <span className="font-display text-[26px] font-bold tabular-nums tracking-[0.02em] text-ink">
             {String(count).padStart(3, "0")}
           </span>
         </div>
 
-        <p className="font-sans text-[11px] uppercase tracking-[0.42em] text-ink-2">
+        <p className="font-display text-[11px] font-semibold uppercase tracking-[0.42em] text-ink-2">
           Satori<span className="text-crimson">.</span>Ventures
         </p>
       </div>

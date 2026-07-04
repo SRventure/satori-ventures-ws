@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Playfair_Display, Inter, Archivo } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import Providers from "@/components/providers/Providers";
 import "./globals.css";
@@ -13,6 +13,13 @@ const playfair = Playfair_Display({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["500", "600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -52,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
-      <body className={`${playfair.variable} ${inter.variable} grain`}>
+      <body className={`${playfair.variable} ${inter.variable} ${archivo.variable} grain`}>
         <Providers>{children}</Providers>
         <Analytics />
       </body>

@@ -10,9 +10,9 @@ html[data-theme="dark"] {
   --accent-gold: 212 175 55;     /* #D4AF37 */
   --accent-red: 193 18 46;       /* #C1122E crimson */
   --accent-cyan: 0 240 255;      /* #00F0FF */
-  --text-primary: 245 245 245;   /* #F5F5F5 */
-  --text-secondary: 138 138 138; /* #8A8A8A */
-  --text-muted: 74 74 74;        /* #4A4A4A */
+  --text-primary: 248 248 246;   /* near-white, high contrast */
+  --text-secondary: 178 178 186; /* #B2B2BA — readable gray */
+  --text-muted: 110 110 118;
   --logo-filter: brightness(0) invert(0.92);
   --glass: rgba(10, 10, 15, 0.72);
   --grain-opacity: 0.05;
@@ -26,9 +26,9 @@ html[data-theme="light"] {
   --accent-gold: 158 122 26;     /* deepened gold, AA on ivory */
   --accent-red: 139 14 34;       /* #8B0E22 oxblood, AA on ivory */
   --accent-cyan: 8 122 138;      /* deepened teal */
-  --text-primary: 20 20 26;
-  --text-secondary: 90 90 100;
-  --text-muted: 196 190 178;
+  --text-primary: 16 16 20;
+  --text-secondary: 74 74 84;
+  --text-muted: 150 146 138;
   --logo-filter: brightness(0) opacity(0.82);
   --glass: rgba(250, 247, 242, 0.78);
   --grain-opacity: 0.035;
@@ -111,7 +111,30 @@ body {
 
 /* ---------- eyebrow ---------- */
 .eyebrow {
-  @apply font-sans text-[12px] font-medium uppercase tracking-[0.32em] text-gold;
+  @apply font-display text-[13px] font-semibold uppercase tracking-[0.28em] text-gold;
+}
+
+/* ---------- ORYZO-style display type ---------- */
+.display-xl {
+  @apply font-display font-extrabold uppercase leading-[0.94] tracking-[-0.015em] text-ink;
+}
+.display-lg {
+  @apply font-display font-bold uppercase leading-[1.0] tracking-[-0.01em] text-ink;
+}
+
+/* small side annotation (like product spec notes) */
+.annotation {
+  @apply font-display text-[13px] font-semibold uppercase leading-[1.65] tracking-[0.06em] text-ink;
+}
+
+/* dashed photo/card frame */
+.dashed-frame {
+  border: 1px dashed rgb(var(--text-primary) / 0.35);
+}
+
+/* scroll-to-continue chapter marker */
+.scroll-continue {
+  @apply inline-flex items-center gap-2 font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-ink-2;
 }
 
 /* ---------- underline form inputs ---------- */

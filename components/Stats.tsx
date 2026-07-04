@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { stats } from "@/lib/companies";
 import Scramble from "@/components/Scramble";
+import VerticalCutReveal from "@/components/ui/vertical-cut-reveal";
 import { useReducedMotion } from "@/components/providers/Providers";
 
 function Counter({
@@ -47,60 +48,6 @@ function Counter({
   );
 }
 
-/* big serif figure with trailing ghost copies (OYLA echo) */
-function GhostFigure({
-  text,
-  highlight,
-  children,
-}: {
-  text: string;
-  highlight?: boolean;
-  children: React.ReactNode;
-}) {
-  const reduce = useReducedMotion();
-  return (
-    <span
-      className={`ghost-echo font-serif text-[58px] leading-[0.95] md:text-[84px] ${
-        highlight ? "text-gold" : "text-ink"
-      }`}
-    >
-      {!reduce && (
-        <>
-          <motion.span
-            aria-hidden="true"
-            className="echo"
-            initial={{ y: 0, opacity: 0 }}
-            whileInView={{ y: "0.42em", opacity: 0.08 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
-          >
-            {text}
-          </motion.span>
-          <motion.span
-            aria-hidden="true"
-            className="echo"
-            initial={{ y: 0, opacity: 0 }}
-            whileInView={{ y: "0.21em", opacity: 0.2 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          >
-            {text}
-          </motion.span>
-        </>
-      )}
-      <motion.span
-        className="relative inline-block"
-        initial={reduce ? false : { y: 28, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {children}
-      </motion.span>
-    </span>
-  );
-}
-
 export default function Stats() {
   return (
     <section className="hairline-t bg-bg-2/40">
@@ -108,55 +55,60 @@ export default function Stats() {
         {/* sticky editorial column */}
         <div className="self-start px-6 py-20 md:px-10 md:py-28 lg:sticky lg:top-[72px]">
           <p className="eyebrow eyebrow-tick mb-7">
-            <Scramble text="By the numbers" />
+            <Scramble text="02 / By the numbers" />
           </p>
-          <h2 className="font-serif text-[38px] leading-[1.08] text-ink md:text-[52px]">
-            Conviction,
+          <h2 className="display-lg text-[clamp(34px,4.6vw,58px)]">
+            <VerticalCutReveal staggerDuration={0.02}>CONVICTION,</VerticalCutReveal>
             <br />
-            <span className="italic text-gold">measured</span>
-            <span className="text-crimson">.</span>
+            <span className="text-gold">
+              <VerticalCutReveal staggerDuration={0.02} delay={0.25}>
+                MEASURED.
+              </VerticalCutReveal>
+            </span>
           </h2>
-          <p className="mt-8 max-w-[400px] font-sans text-[15px] font-light leading-relaxed text-ink-2 md:text-[16px]">
-            Capital is deployed one conviction at a time — no index bets, no
-            spray-and-pray. Every position is a thesis about where the
-            internet&apos;s next layer is being built.
+          <p className="mt-8 max-w-[420px] font-sans text-[17px] leading-relaxed text-ink">
+            Capital is deployed one conviction at a time. Every position is a
+            thesis about where the internet&apos;s next layer is being built.
           </p>
           <a
             href="#portfolio"
-            className="pill-cta mt-12 text-ink-2 transition-colors duration-300 hover:text-ink"
+            className="pill-cta mt-12 text-ink transition-colors duration-300 hover:text-gold"
           >
             View collection
             <span className="pill-plus text-gold">+</span>
           </a>
         </div>
 
-        {/* hairline stat rows */}
+        {/* stat rows */}
         <div className="lg:hairline-l">
           {stats.map((s, i) => (
-            <div
+            <motion.div
               key={s.label}
-              className={`flex flex-col gap-4 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-12 md:py-16 ${
+              className={`flex flex-col gap-4 px-6 py-12 md:flex-row md:items-center md:justify-between md:px-12 md:py-14 ${
                 i > 0 ? "hairline-t" : ""
               }`}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="overflow-visible pb-4 md:pb-8">
-                <GhostFigure
-                  text={`${s.prefix ?? ""}${s.end}${s.suffix ?? ""}`}
-                  highlight={s.highlight}
-                >
-                  <Counter end={s.end} prefix={s.prefix ?? ""} suffix={s.suffix} />
-                </GhostFigure>
-              </div>
-              <div className="md:max-w-[220px] md:text-right">
-                <p className="font-sans text-[12px] font-medium uppercase tracking-[0.22em] text-ink">
+              <span
+                className={`font-display text-[64px] font-black leading-none tracking-[-0.02em] md:text-[96px] ${
+                  s.highlight ? "text-gold" : "text-ink"
+                }`}
+              >
+                <Counter end={s.end} prefix={s.prefix ?? ""} suffix={s.suffix} />
+              </span>
+              <div className="md:max-w-[240px] md:text-right">
+                <p className="font-display text-[14px] font-bold uppercase tracking-[0.18em] text-ink">
                   <span className="mr-2 text-crimson">0{i + 1}</span>
                   {s.label}
                 </p>
-                <p className="mt-2 font-sans text-[13px] font-light leading-relaxed text-ink-2">
+                <p className="mt-2 font-sans text-[15px] leading-relaxed text-ink-2">
                   {s.sub}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

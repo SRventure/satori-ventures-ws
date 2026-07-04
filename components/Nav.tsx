@@ -67,7 +67,7 @@ export default function Nav() {
             className="company-logo transition-opacity duration-300 group-hover:opacity-80"
             priority
           />
-          <span className="font-serif text-[19px] tracking-wide text-ink transition-colors duration-300 group-hover:text-gold">
+          <span className="font-display text-[17px] font-bold uppercase tracking-[0.08em] text-ink transition-colors duration-300 group-hover:text-gold">
             Satori<span className="text-crimson">.</span>Ventures
           </span>
         </a>
@@ -78,7 +78,7 @@ export default function Nav() {
               key={l.href}
               href={l.href}
               onClick={(e) => scrollToAnchor(e, l.href)}
-              className="nav-link font-sans text-[14px] font-medium tracking-wide text-ink-2 transition-colors duration-300 hover:text-ink"
+              className="nav-link font-display text-[13px] font-semibold uppercase tracking-[0.12em] text-ink-2 transition-colors duration-300 hover:text-ink"
             >
               {l.label}
             </a>
@@ -120,7 +120,7 @@ export default function Nav() {
             transition={{ duration: 0.35 }}
           >
             <div className="flex h-[72px] items-center justify-between px-6">
-              <span className="font-serif text-[19px] text-ink">
+              <span className="font-display text-[17px] font-bold uppercase tracking-[0.08em] text-ink">
                 Satori<span className="text-crimson">.</span>Ventures
               </span>
               <button
@@ -133,9 +133,9 @@ export default function Nav() {
             </div>
             <span
               aria-hidden="true"
-              className="text-stroke-ink pointer-events-none absolute bottom-4 left-0 select-none font-serif text-[26vw] leading-none opacity-40"
+              className="text-stroke-ink pointer-events-none absolute bottom-4 left-0 select-none font-display text-[24vw] font-black uppercase leading-none opacity-40"
             >
-              Satori
+              SATORI
             </span>
             <div className="relative flex flex-1 flex-col items-start justify-center gap-2 px-8">
               {LINKS.map((l, i) => (
@@ -146,12 +146,12 @@ export default function Nav() {
                     scrollToAnchor(e, l.href);
                     setOpen(false);
                   }}
-                  className="group flex items-baseline gap-4 py-3 font-serif text-[44px] text-ink transition-colors hover:text-gold"
+                  className="group flex items-baseline gap-4 py-3 font-display text-[38px] font-black uppercase tracking-[-0.01em] text-ink transition-colors hover:text-gold"
                   initial={{ y: 36, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.08 + i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <span className="font-sans text-[12px] tracking-[0.2em] text-crimson">
+                  <span className="font-display text-[12px] font-bold tracking-[0.2em] text-crimson">
                     0{i + 1}
                   </span>
                   {l.label}

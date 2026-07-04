@@ -3,8 +3,10 @@ import Preloader from "@/components/Preloader";
 import Marquee from "@/components/Marquee";
 import Hero from "@/components/hero/Hero";
 import Manifesto from "@/components/Manifesto";
+import Conviction from "@/components/Conviction";
 import Stats from "@/components/Stats";
 import Portfolio from "@/components/Portfolio";
+import KineticWord from "@/components/KineticWord";
 import Focus from "@/components/Focus";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -21,8 +23,10 @@ export default function Home() {
           className="hairline-t hairline-b"
         />
         <Manifesto />
+        <Conviction />
         <Stats />
         <Portfolio />
+        <KineticWord word="RENAISSANCE" />
         <Focus />
         <Contact />
       </main>

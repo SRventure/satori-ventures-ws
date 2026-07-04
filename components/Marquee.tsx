@@ -46,7 +46,7 @@ export default function Marquee({
     <div key={key} aria-hidden={key === "b"} className="flex shrink-0 items-center">
       {items.map((it, i) => (
         <span key={i} className="flex items-center whitespace-nowrap">
-          <span className="font-serif italic text-stroke-gold px-6 text-[11vw] leading-[1.1] md:text-[120px]">
+          <span className="text-stroke-gold px-6 font-display text-[11vw] font-black uppercase leading-[1.1] tracking-[-0.01em] md:text-[110px]">
             {it}
           </span>
           <span className="mx-2 inline-block h-2.5 w-2.5 rounded-full bg-crimson" />

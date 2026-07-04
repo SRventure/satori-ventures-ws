@@ -6,25 +6,41 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { companies, type Company } from "@/lib/companies";
 import Scramble from "@/components/Scramble";
+import VerticalCutReveal from "@/components/ui/vertical-cut-reveal";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { useReducedMotion } from "@/components/providers/Providers";
 
-function Card({ c, index }: { c: Company; index: number }) {
+function Card({
+  c,
+  index,
+  hovered,
+  onHover,
+}: {
+  c: Company;
+  index: number;
+  hovered: boolean;
+  onHover: (i: number | null) => void;
+}) {
   return (
     <a
       href={c.url}
       target="_blank"
       rel="noopener noreferrer"
       data-cursor-label="View"
-      className="group relative block w-[78vw] shrink-0 select-none overflow-hidden bg-bg-2 transition-colors duration-500 sm:w-[420px]"
-      style={{ aspectRatio: "16 / 10", border: "1px solid var(--hairline)" }}
+      onMouseEnter={() => onHover(index)}
+      onMouseLeave={() => onHover(null)}
+      className="dashed-frame group relative block w-[78vw] shrink-0 select-none overflow-hidden bg-bg-2/60 transition-colors duration-500 hover:bg-bg-2 sm:w-[420px]"
+      style={{ aspectRatio: "16 / 10" }}
     >
+      {hovered && <BorderBeam size={70} duration={4} />}
+
       {/* index */}
-      <span className="absolute left-5 top-4 font-sans text-[11px] tracking-[0.2em] text-ink-3 transition-colors duration-300 group-hover:text-crimson">
-        {String(index + 1).padStart(2, "0")}
+      <span className="absolute left-5 top-4 font-display text-[12px] font-semibold tracking-[0.2em] text-ink-2 transition-colors duration-300 group-hover:text-crimson">
+        №{String(index + 1).padStart(2, "0")}
       </span>
 
       {/* logo plate */}
-      <div className="flex h-[62%] items-center justify-center px-10">
+      <div className="flex h-[58%] items-center justify-center px-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={c.logo}
@@ -34,21 +50,23 @@ function Card({ c, index }: { c: Company; index: number }) {
         />
       </div>
 
-      {/* glass caption */}
+      {/* caption */}
       <div
         className="absolute inset-x-0 bottom-0 px-6 py-4 backdrop-blur-md"
         style={{ background: "var(--glass)", borderTop: "1px solid var(--hairline)" }}
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-sans text-[11px] font-medium uppercase tracking-[0.22em] text-crimson">
+            <p className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-crimson">
               {c.category}
             </p>
-            <p className="mt-1 font-serif text-[22px] leading-tight text-ink">{c.name}</p>
+            <p className="mt-1 font-display text-[21px] font-bold uppercase leading-tight tracking-[0.01em] text-ink">
+              {c.name}
+            </p>
           </div>
           <ArrowUpRight className="h-5 w-5 text-ink-2 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold" />
         </div>
-        <p className="mt-2 line-clamp-2 font-sans text-[13px] font-light leading-relaxed text-ink-2 opacity-0 transition-opacity duration-400 group-hover:opacity-100">
+        <p className="mt-2 line-clamp-2 font-sans text-[14px] leading-relaxed text-ink-2 opacity-0 transition-opacity duration-400 group-hover:opacity-100">
           {c.description}
         </p>
       </div>
@@ -72,6 +90,7 @@ export default function Portfolio() {
   const barRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const [horizontal, setHorizontal] = useState(false);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   useEffect(() => {
     setHorizontal(!reduce && window.innerWidth >= 1024);
@@ -113,16 +132,23 @@ export default function Portfolio() {
       <div className="flex h-full flex-col justify-center">
         <div className="mx-auto flex w-full max-w-wide items-end justify-between px-6 md:px-10">
           <div>
-            <p className="eyebrow eyebrow-tick mb-4">
-              <Scramble text="Portfolio" />
+            <p className="eyebrow eyebrow-tick mb-6">
+              <Scramble text="03 / Portfolio" />
             </p>
-            <h2 className="font-serif text-[40px] leading-tight text-ink md:text-[56px]">
-              The companies <span className="italic text-gold">redefining</span> tomorrow
+            <h2 className="display-lg text-[clamp(34px,4.8vw,60px)]">
+              <VerticalCutReveal staggerDuration={0.02}>THE COMPANIES</VerticalCutReveal>
+              <br />
+              <span className="text-gold">
+                <VerticalCutReveal staggerDuration={0.02} delay={0.2}>
+                  REDEFINING TOMORROW
+                </VerticalCutReveal>
+              </span>
             </h2>
           </div>
-          <p className="hidden shrink-0 pb-2 font-serif text-[15px] italic text-ink-2 md:block">
-            <span className="not-italic text-crimson">26</span> positions — drag through the
-            collection
+          <p className="annotation hidden shrink-0 max-w-[200px] pb-2 text-right text-ink-2 md:block">
+            <span className="text-crimson">26</span> positions
+            <br />
+            drag through the collection
           </p>
         </div>
 
@@ -136,7 +162,7 @@ export default function Portfolio() {
         >
           {companies.map((c, i) => (
             <div key={c.name} className={horizontal ? "" : "snap-start"}>
-              <Card c={c} index={i} />
+              <Card c={c} index={i} hovered={hovered === i} onHover={setHovered} />
             </div>
           ))}
         </div>
@@ -144,10 +170,10 @@ export default function Portfolio() {
         {/* progress bar */}
         {horizontal && (
           <div className="mx-auto mt-12 w-full max-w-wide px-6 md:px-10" aria-hidden="true">
-            <div className="h-px w-full bg-ink-3/40">
+            <div className="h-[2px] w-full bg-ink-3/40">
               <div
                 ref={barRef}
-                className="h-px w-full origin-left bg-gold"
+                className="h-[2px] w-full origin-left bg-gold"
                 style={{ transform: "scaleX(0)" }}
               />
             </div>
