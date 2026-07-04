@@ -305,9 +305,27 @@ body {
   color: rgb(255 255 255);
 }
 
+/* holographic panel flicker */
+.holo-flicker {
+  animation: holo-flicker 3.4s steps(1, end) infinite;
+}
+@keyframes holo-flicker {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.96; }
+  94% { opacity: 1; }
+  97% { opacity: 0.97; }
+  98% { opacity: 1; }
+}
+
+/* cursor ghost trail dots */
+.cursor-trail {
+  @apply pointer-events-none fixed left-0 top-0 z-[99] hidden rounded-full bg-gold;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .grain::after,
   .chevron-pulse,
+  .holo-flicker,
   .status-chip .chip-dot {
     animation: none;
   }

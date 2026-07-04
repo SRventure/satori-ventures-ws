@@ -12,6 +12,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Hud from "@/components/ui/hud";
 import SatoriCube from "@/components/SatoriCube";
+import PortfolioConstellation from "@/components/PortfolioConstellation";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         <Manifesto />
         <Conviction />
         <Stats />
+        <PortfolioConstellation />
         <Portfolio />
         <KineticWord word="RENAISSANCE" />
         <Focus />

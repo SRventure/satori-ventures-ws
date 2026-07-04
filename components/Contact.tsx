@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import emailjs from "@emailjs/browser";
-import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import Magnetic from "@/components/Magnetic";
 import VerticalCutReveal from "@/components/ui/vertical-cut-reveal";
-import { Parallax } from "@/components/ui/parallax";
-import { useReducedMotion } from "@/components/providers/Providers";
+import { useReducedMotion, useTheme } from "@/components/providers/Providers";
+import { CITIES } from "@/lib/cities";
+
+const Globe = dynamic(() => import("@/components/ContactGlobe"), { ssr: false });
 
 const SERVICE_ID =
   process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "service_q7rgzm8";
@@ -16,9 +18,50 @@ const TEMPLATE_ID =
 const PUBLIC_KEY =
   process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "RElQ17WxbehSv1AID";
 
+function Field({
+  id,
+  name,
+  label,
+  type = "text",
+  textarea = false,
+  required = true,
+}: {
+  id: string;
+  name: string;
+  label: string;
+  type?: string;
+  textarea?: boolean;
+  required?: boolean;
+}) {
+  const cls = "line-input mt-2 font-sans";
+  return (
+    <div className="group/field">
+      <label
+        htmlFor={id}
+        className="font-mono text-[10px] uppercase tracking-[0.26em] text-ink-2 transition-colors group-focus-within/field:text-gold"
+      >
+        {label} {required && <span className="text-crimson">*</span>}
+      </label>
+      {textarea ? (
+        <textarea id={id} name={name} required={required} rows={4} className={`${cls} resize-none`} />
+      ) : (
+        <input id={id} name={name} type={type} required={required} className={cls} />
+      )}
+    </div>
+  );
+}
+
 export default function Contact() {
   const reduce = useReducedMotion();
+  const { theme } = useTheme();
+  const ref = useRef<HTMLElement>(null);
+  const near = useInView(ref, { margin: "400px 0px 400px 0px" });
+  const [webgl, setWebgl] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  useEffect(() => {
+    setWebgl(!reduce && window.innerWidth >= 1024);
+  }, [reduce]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,16 +79,20 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="hairline-t relative overflow-hidden py-28 md:py-40">
-      <Parallax
-        speed={0.3}
+    <section ref={ref} id="contact" className="hairline-t relative overflow-hidden py-24 md:py-32">
+      {/* faint perspective grid backdrop */}
+      <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 opacity-[0.08]"
-        style={{ background: "radial-gradient(ellipse, rgb(var(--accent-gold)) 0%, rgb(var(--accent-red)) 38%, transparent 62%)" }}
+        className="pointer-events-none absolute inset-0 opacity-60"
+        style={{
+          background:
+            "repeating-linear-gradient(to right, rgb(var(--accent-gold) / 0.025) 0 1px, transparent 1px 64px), repeating-linear-gradient(to bottom, rgb(var(--accent-gold) / 0.025) 0 1px, transparent 1px 64px)",
+        }}
       />
+
       <div className="relative mx-auto w-full max-w-wide px-6 md:px-10">
-        <p className="eyebrow eyebrow-tick mb-7">05 / Contact</p>
-        <h2 className="display-xl text-[clamp(44px,8.6vw,124px)]">
+        <p className="eyebrow eyebrow-tick mb-7">05 / Engagement portal</p>
+        <h2 className="display-xl text-[clamp(44px,8vw,116px)]">
           <span className="block">
             <VerticalCutReveal staggerDuration={0.025}>LET'S BUILD</VerticalCutReveal>
           </span>
@@ -59,95 +106,127 @@ export default function Contact() {
           </span>
         </h2>
 
-        <div className="mt-16 grid gap-16 lg:grid-cols-[1fr_420px]">
-          <form onSubmit={onSubmit} className="max-w-[640px] space-y-10">
-            <div className="grid gap-10 sm:grid-cols-2">
-              <div>
-                <label htmlFor="c-name" className="eyebrow block">Name</label>
-                <input
-                  id="c-name"
-                  name="from_name"
-                  type="text"
-                  required
-                  placeholder="Your name"
-                  className="line-input mt-3"
-                />
+        <div className="mt-16 grid gap-14 lg:grid-cols-[1fr_1fr] lg:gap-10">
+          {/* left: global presence globe */}
+          <div className="relative order-2 lg:order-1">
+            {webgl && near && (
+              <div className="h-[420px] w-full lg:h-[480px]" data-cursor-hover>
+                <Globe dark={theme === "dark"} />
               </div>
-              <div>
-                <label htmlFor="c-email" className="eyebrow block">Email</label>
-                <input
-                  id="c-email"
-                  name="reply_to"
-                  type="email"
-                  required
-                  placeholder="you@company.com"
-                  className="line-input mt-3"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="c-message" className="eyebrow block">Message</label>
-              <textarea
-                id="c-message"
-                name="message"
-                required
-                rows={3}
-                placeholder="Tell us what you're building"
-                className="line-input mt-3 resize-none"
-              />
-            </div>
-
-            <div className="flex items-center gap-6">
-              <Magnetic>
-                <button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="group inline-flex items-center gap-2 bg-gold px-10 py-4 font-display text-[14px] font-bold uppercase tracking-[0.14em] text-black transition-colors duration-300 hover:bg-crimson hover:text-white disabled:opacity-50"
-                >
-                  {status === "sending" ? "Sending…" : "Start the conversation"}
-                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </button>
-              </Magnetic>
-              <p aria-live="polite" className="font-sans text-[14px] text-ink-2">
-                {status === "sent" && <span className="text-gold">Message sent — we&apos;ll be in touch.</span>}
-                {status === "error" && (
-                  <span>
-                    Something broke — email us at{" "}
-                    <a href="mailto:contact@srventures.io" className="text-gold underline">
-                      contact@srventures.io
-                    </a>
-                  </span>
-                )}
+            )}
+            <div className={webgl ? "mt-2" : "mt-0"}>
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-ink-2">
+                Global presence // rooted in Asia
               </p>
-            </div>
-          </form>
-
-          <div className="space-y-8 lg:pt-2">
-            <div>
-              <p className="eyebrow">Email</p>
+              <ul className="mt-4 grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3">
+                {CITIES.map((c) => (
+                  <li key={c.code} className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink">
+                    <span
+                      className={`inline-block h-[5px] w-[5px] rounded-full ${c.hq ? "bg-crimson" : "bg-gold"}`}
+                    />
+                    {c.code}
+                    <span className="text-ink-2">
+                      {c.hq ? "// HQ" : "// Active"}
+                    </span>
+                  </li>
+                ))}
+              </ul>
               <a
                 href="mailto:contact@srventures.io"
-                className="mt-3 inline-block font-display text-[19px] font-bold uppercase tracking-[0.04em] text-ink transition-colors hover:text-gold"
+                className="mt-6 inline-block font-display text-[17px] font-bold uppercase tracking-[0.04em] text-ink transition-colors hover:text-gold"
               >
                 contact@srventures.io
               </a>
             </div>
-            <div>
-              <p className="eyebrow">Presence</p>
-              <p className="mt-3 font-sans text-[15px] leading-relaxed text-ink">
-                Global reach, rooted in Asia.
-              </p>
-            </div>
-            <motion.p
-              className="annotation max-w-[300px] text-ink-2"
-              initial={reduce ? false : { opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              We answer fast. Conviction doesn&apos;t wait for Monday
-              <span className="text-crimson">*</span>
-            </motion.p>
+          </div>
+
+          {/* right: terminal form */}
+          <div className="glass-card relative order-1 p-8 md:p-10 lg:order-2">
+            {/* scanline texture */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "repeating-linear-gradient(to bottom, rgb(var(--accent-gold) / 0.02) 0 1px, transparent 1px 4px)",
+              }}
+            />
+            <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-gold">
+              Secure channel // open
+            </p>
+
+            <AnimatePresence mode="wait">
+              {status === "sent" ? (
+                <motion.div
+                  key="sent"
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex min-h-[380px] flex-col items-center justify-center text-center"
+                >
+                  <motion.span
+                    initial={reduce ? false : { scale: 2.4, opacity: 0, rotate: -18 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.15 }}
+                    className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-gold text-[26px] text-gold"
+                    style={{ boxShadow: "0 0 34px rgb(var(--accent-gold) / 0.35)" }}
+                  >
+                    ✓
+                  </motion.span>
+                  <p className="mt-6 font-display text-[22px] font-black uppercase tracking-[0.08em] text-ink">
+                    Transmission received
+                  </p>
+                  <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-2">
+                    We answer fast — conviction doesn't wait for Monday
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.form
+                  key="form"
+                  onSubmit={onSubmit}
+                  className="relative mt-8 space-y-8"
+                  animate={status === "error" && !reduce ? { x: [0, -8, 8, -5, 5, 0] } : {}}
+                  transition={{ duration: 0.4 }}
+                >
+                  <div className="grid gap-8 sm:grid-cols-2">
+                    <Field id="c-name" name="from_name" label="Name" />
+                    <Field id="c-email" name="reply_to" label="Email" type="email" />
+                  </div>
+                  <Field id="c-company" name="company" label="Company" required={false} />
+                  <Field id="c-message" name="message" label="Message" textarea />
+
+                  <div className="flex flex-wrap items-center gap-5 pt-2">
+                    <Magnetic>
+                      <button
+                        type="submit"
+                        disabled={status === "sending"}
+                        className="engage-pill relative overflow-hidden !px-12 !py-4 !text-[12px] disabled:opacity-60"
+                      >
+                        {status === "sending" ? (
+                          <span className="inline-flex gap-1">
+                            Transmitting
+                            <span className="animate-pulse">.</span>
+                            <span className="animate-pulse [animation-delay:150ms]">.</span>
+                            <span className="animate-pulse [animation-delay:300ms]">.</span>
+                          </span>
+                        ) : (
+                          "Transmit ↗"
+                        )}
+                      </button>
+                    </Magnetic>
+                    <p aria-live="polite" className="font-mono text-[11px] text-ink-2">
+                      {status === "error" && (
+                        <span>
+                          Channel error — email{" "}
+                          <a href="mailto:contact@srventures.io" className="text-gold underline">
+                            contact@srventures.io
+                          </a>
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                </motion.form>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
