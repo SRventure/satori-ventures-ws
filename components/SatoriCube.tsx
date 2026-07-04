@@ -13,14 +13,46 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { ChevronDown, X } from "lucide-react";
-import { useReducedMotion } from "@/components/providers/Providers";
+import { useReducedMotion, useTheme } from "@/components/providers/Providers";
 
 const CubeCanvas = dynamic(() => import("./SatoriCubeScene"), { ssr: false });
 
-const INK = "#F4EFE6";
-const INK2 = "#93909b";
-const GOLD = "#E2B84C";
 const EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
+
+/* per-theme stage tokens — dark: neon-noir observatory; light: red-lux
+   drafting paper. Accents must match the scene palettes in SatoriCubeScene. */
+const THEMES = {
+  dark: {
+    stage: "#0a0a0f",
+    ink: "#F4EFE6",
+    ink2: "#93909b",
+    gold: "#E2B84C",
+    crimson: "#D61F33",
+    accents: ["#00d4ff", "#f59e0b", "#67e8f9", "#a855f7"],
+    grid: "rgba(0,212,255,0.05)",
+    glow: "radial-gradient(ellipse 60% 45% at 50% 62%, rgba(0, 212, 255, 0.10) 0%, transparent 60%), radial-gradient(ellipse 42% 32% at 50% 26%, rgba(168, 85, 247, 0.09) 0%, transparent 65%)",
+    vignette:
+      "radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(0,0,0,0.5) 100%)",
+    card: "#101018",
+    backdrop: "rgba(5, 5, 8, 0.78)",
+    ghostAlpha: "14",
+  },
+  light: {
+    stage: "#f8f4ec",
+    ink: "#17120e",
+    ink2: "#6f6659",
+    gold: "#84202A",
+    crimson: "#A81020",
+    accents: ["#0369a1", "#b45309", "#0e7490", "#7e22ce"],
+    grid: "rgba(168,16,32,0.055)",
+    glow: "radial-gradient(ellipse 60% 45% at 50% 62%, rgba(168, 16, 32, 0.07) 0%, transparent 60%), radial-gradient(ellipse 42% 32% at 50% 26%, rgba(132, 32, 42, 0.06) 0%, transparent 65%)",
+    vignette:
+      "radial-gradient(ellipse 75% 70% at 50% 50%, transparent 58%, rgba(88, 44, 30, 0.16) 100%)",
+    card: "#fffdf8",
+    backdrop: "rgba(244, 238, 226, 0.82)",
+    ghostAlpha: "1f",
+  },
+};
 
 /* four strata, bottom → top — indices match the WebGL slabs */
 export const CUBE_LAYERS = [
@@ -29,28 +61,24 @@ export const CUBE_LAYERS = [
     name: "The Renaissance",
     note: "The builders underneath it all",
     desc: "Compute, power, capital — the physical substrate the whole conviction stands on.",
-    accent: "#00d4ff",
   },
   {
     strata: "Network & Connectivity",
     name: "Web3 Rails",
     note: "Chains, rollups, protocols",
     desc: "Consensus rails and rollups — moving value the way the internet moves data.",
-    accent: "#f59e0b",
   },
   {
     strata: "AI & Intelligence",
     name: "Frontier AI",
     note: "Models, agents, compute",
     desc: "Models and autonomous agents — the intelligence layer training on top of the rails.",
-    accent: "#67e8f9",
   },
   {
     strata: "Application & Economy",
     name: "Open Economies",
     note: "Ownership, markets, incentives",
     desc: "Interfaces, protocols and token economies — where ownership finally reaches people.",
-    accent: "#a855f7",
   },
 ];
 
@@ -66,16 +94,21 @@ function env(p: number, i: number) {
   return apart * (1 - back * back);
 }
 
+type Tokens = (typeof THEMES)["dark"];
+
 function LayerLabel({
   progress,
   index,
   focus,
+  t,
 }: {
   progress: MotionValue<number>;
   index: number;
   focus: number | null;
+  t: Tokens;
 }) {
   const L = CUBE_LAYERS[index];
+  const accent = t.accents[index];
   const side = index % 2 === 0 ? "left" : "right";
   const top = ["74%", "55%", "36%", "14%"][index];
   const t0 = 0.32 + (3 - index) * 0.05;
@@ -94,25 +127,25 @@ function LayerLabel({
       <div style={{ opacity: dim ? 0.35 : 1, transition: `opacity 0.3s ${EASE}` }}>
         <p
           className="font-mono text-[8px] uppercase tracking-[0.18em] md:text-[10px]"
-          style={{ color: L.accent }}
+          style={{ color: accent }}
         >
           Layer 0{index + 1} // {L.strata}
         </p>
         <p
           className="mt-1 font-display text-[14px] font-black uppercase tracking-[0.04em] md:text-[22px]"
-          style={{ color: INK }}
+          style={{ color: t.ink }}
         >
           {L.name}
         </p>
         <motion.span
-          style={{ scaleX: line, backgroundColor: L.accent }}
+          style={{ scaleX: line, backgroundColor: accent }}
           className={`mt-1 block h-[2px] w-full ${
             side === "left" ? "origin-left" : "origin-right"
           }`}
         />
         <p
           className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] md:text-[10px]"
-          style={{ color: INK2 }}
+          style={{ color: t.ink2 }}
         >
           {L.note}
         </p>
@@ -124,6 +157,9 @@ function LayerLabel({
 export default function SatoriCube() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const { theme } = useTheme();
+  const dark = theme === "dark";
+  const T = dark ? THEMES.dark : THEMES.light;
   const [webgl, setWebgl] = useState(false);
   const [focus, setFocusState] = useState<number | null>(null);
   const [expand, setExpand] = useState<number | null>(null);
@@ -185,7 +221,7 @@ export default function SatoriCube() {
           onClick={() => setExpand(null)}
           className="fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto p-5 md:p-10"
           style={{
-            background: "rgba(5, 5, 8, 0.78)",
+            background: T.backdrop,
             backdropFilter: "blur(14px)",
             WebkitBackdropFilter: "blur(14px)",
           }}
@@ -197,12 +233,16 @@ export default function SatoriCube() {
             transition={{ type: "spring", stiffness: 260, damping: 26 }}
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-[720px] overflow-hidden rounded-lg border p-6 md:p-12"
-            style={{ borderColor: `${CUBE_LAYERS[expand].accent}55`, background: "#101018" }}
+            style={{
+              borderColor: `${T.accents[expand]}55`,
+              background: T.card,
+              boxShadow: dark ? "none" : "0 24px 60px rgba(60, 24, 16, 0.18)",
+            }}
           >
             <span
               aria-hidden="true"
               className="pointer-events-none absolute -right-4 -top-10 font-display text-[150px] font-black leading-none md:text-[220px]"
-              style={{ color: `${CUBE_LAYERS[expand].accent}14` }}
+              style={{ color: `${T.accents[expand]}${T.ghostAlpha}` }}
             >
               0{expand + 1}
             </span>
@@ -210,33 +250,33 @@ export default function SatoriCube() {
               onClick={() => setExpand(null)}
               aria-label="Close layer detail"
               className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-300"
-              style={{ borderColor: `${CUBE_LAYERS[expand].accent}66`, color: INK }}
+              style={{ borderColor: `${T.accents[expand]}66`, color: T.ink }}
             >
               <X className="h-4 w-4" />
             </button>
             <p
               className="font-mono text-[10px] uppercase tracking-[0.22em]"
-              style={{ color: CUBE_LAYERS[expand].accent }}
+              style={{ color: T.accents[expand] }}
             >
               Layer 0{expand + 1} // {CUBE_LAYERS[expand].strata}
             </p>
             <h3
               className="mt-3 font-display text-[30px] font-black uppercase md:text-[44px]"
-              style={{ color: INK }}
+              style={{ color: T.ink }}
             >
               {CUBE_LAYERS[expand].name}
             </h3>
             <p
               className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em]"
-              style={{ color: INK2 }}
+              style={{ color: T.ink2 }}
             >
               {CUBE_LAYERS[expand].note}
             </p>
             <span
               className="mt-5 block h-[2px] w-14"
-              style={{ backgroundColor: CUBE_LAYERS[expand].accent }}
+              style={{ backgroundColor: T.accents[expand] }}
             />
-            <p className="mt-5 max-w-[520px] text-[15px] leading-relaxed" style={{ color: INK }}>
+            <p className="mt-5 max-w-[520px] text-[15px] leading-relaxed" style={{ color: T.ink }}>
               {CUBE_LAYERS[expand].desc}
             </p>
           </motion.div>
@@ -288,24 +328,19 @@ export default function SatoriCube() {
     >
       <div
         className="sticky top-0 isolate h-[100svh] overflow-hidden"
-        style={{ backgroundColor: "#0a0a0f" }}
+        style={{ backgroundColor: T.stage, transition: `background-color 0.4s ${EASE}` }}
       >
         {/* stage atmosphere */}
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
-          style={{
-            opacity: glowOpacity,
-            background:
-              "radial-gradient(ellipse 60% 45% at 50% 62%, rgba(0, 212, 255, 0.10) 0%, transparent 60%), radial-gradient(ellipse 42% 32% at 50% 26%, rgba(168, 85, 247, 0.09) 0%, transparent 65%)",
-          }}
+          style={{ opacity: glowOpacity, background: T.glow }}
         />
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
-            background:
-              "repeating-linear-gradient(to right, rgba(0,212,255,0.05) 0 1px, transparent 1px 72px), repeating-linear-gradient(to bottom, rgba(0,212,255,0.05) 0 1px, transparent 1px 72px)",
+            background: `repeating-linear-gradient(to right, ${T.grid} 0 1px, transparent 1px 72px), repeating-linear-gradient(to bottom, ${T.grid} 0 1px, transparent 1px 72px)`,
           }}
         />
 
@@ -317,6 +352,7 @@ export default function SatoriCube() {
               focusRef={focusRef}
               onFocus={setFocus}
               onExpand={setExpand}
+              dark={dark}
             />
           </div>
         )}
@@ -325,10 +361,7 @@ export default function SatoriCube() {
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-[42]"
-          style={{
-            background:
-              "radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(0,0,0,0.5) 100%)",
-          }}
+          style={{ background: T.vignette }}
         />
 
         {/* phase 1: heading */}
@@ -338,21 +371,21 @@ export default function SatoriCube() {
         >
           <p
             className="mb-5 inline-block font-mono text-[10px] uppercase tracking-[0.3em]"
-            style={{ color: INK2 }}
+            style={{ color: T.ink2 }}
           >
-            <span style={{ color: "#D61F33" }}>—</span> 00 / Thesis architecture
+            <span style={{ color: T.crimson }}>—</span> 00 / Thesis architecture
           </p>
-          <h2 className="display-lg text-[clamp(34px,5.8vw,72px)]" style={{ color: INK }}>
-            ONE CONVICTION. <span style={{ color: GOLD }}>FOUR LAYERS.</span>
+          <h2 className="display-lg text-[clamp(34px,5.8vw,72px)]" style={{ color: T.ink }}>
+            ONE CONVICTION. <span style={{ color: T.gold }}>FOUR LAYERS.</span>
           </h2>
         </motion.div>
 
         {/* phase 2: layer labels */}
         {CUBE_LAYERS.map((_, i) => (
-          <LayerLabel key={i} progress={scrollYProgress} index={i} focus={focus} />
+          <LayerLabel key={i} progress={scrollYProgress} index={i} focus={focus} t={T} />
         ))}
         <motion.p
-          style={{ opacity: inspectOpacity, color: INK2 }}
+          style={{ opacity: inspectOpacity, color: T.ink2 }}
           className="pointer-events-none absolute inset-x-0 bottom-[5vh] z-[46] text-center font-mono text-[9px] uppercase tracking-[0.26em]"
         >
           <span
@@ -370,13 +403,13 @@ export default function SatoriCube() {
           <Image src="/satorl_logo.png" alt="" width={72} height={84} />
           <p
             className="mt-6 font-display text-[28px] font-black uppercase tracking-[0.1em]"
-            style={{ color: INK }}
+            style={{ color: T.ink }}
           >
-            Satori<span style={{ color: "#D61F33" }}>.</span>Ventures
+            Satori<span style={{ color: T.crimson }}>.</span>Ventures
           </p>
           <p
             className="mt-2 font-mono text-[10px] uppercase tracking-[0.26em]"
-            style={{ color: INK2 }}
+            style={{ color: T.ink2 }}
           >
             Thesis assembled // Online
           </p>
@@ -390,9 +423,9 @@ export default function SatoriCube() {
         >
           <span
             className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.26em]"
-            style={{ color: INK2 }}
+            style={{ color: T.ink2 }}
           >
-            <ChevronDown className="chevron-pulse h-4 w-4" style={{ color: GOLD }} />
+            <ChevronDown className="chevron-pulse h-4 w-4" style={{ color: T.gold }} />
             Explore
           </span>
         </motion.div>
