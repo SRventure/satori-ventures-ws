@@ -5,7 +5,6 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useTheme } from "@/components/providers/Providers";
 
-const COUNT = 9000;
 const FOV = 60;
 const CAM_Z = 8;
 
@@ -103,12 +102,21 @@ function EnsoRing({ dark }: { dark: boolean }) {
   );
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
+    const setFrom = (cx: number, cy: number) => {
+      mouse.current.x = (cx / window.innerWidth) * 2 - 1;
+      mouse.current.y = -((cy / window.innerHeight) * 2 - 1);
     };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
+    const onPointer = (e: PointerEvent) => setFrom(e.clientX, e.clientY);
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) setFrom(t.clientX, t.clientY);
+    };
+    window.addEventListener("pointermove", onPointer, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("touchmove", onTouch);
+    };
   }, []);
 
   useFrame((state, delta) => {
@@ -155,14 +163,17 @@ function EnsoRing({ dark }: { dark: boolean }) {
   );
 }
 
-function Particles({ dark }: { dark: boolean }) {
+function Particles({ dark, count }: { dark: boolean; count: number }) {
   const mat = useRef<THREE.ShaderMaterial>(null);
   const { size } = useThree();
   const mouse = useRef(new THREE.Vector2(-100, -100));
   const scrollVel = useRef(0);
   const lastScroll = useRef(0);
+  const lastInput = useRef(0);
+  const coarse = useRef(false);
 
   const { positions, sizes, seeds } = useMemo(() => {
+    const COUNT = count;
     const positions = new Float32Array(COUNT * 3);
     const sizes = new Float32Array(COUNT);
     const seeds = new Float32Array(COUNT);
@@ -174,7 +185,7 @@ function Particles({ dark }: { dark: boolean }) {
       seeds[i] = Math.random() * 100;
     }
     return { positions, sizes, seeds };
-  }, []);
+  }, [count]);
 
   const uniforms = useMemo(
     () => ({
@@ -192,15 +203,26 @@ function Particles({ dark }: { dark: boolean }) {
   );
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const ndcX = (e.clientX / window.innerWidth) * 2 - 1;
-      const ndcY = -((e.clientY / window.innerHeight) * 2 - 1);
+    coarse.current = window.matchMedia("(pointer: coarse)").matches;
+    const setFrom = (cx: number, cy: number) => {
+      const ndcX = (cx / window.innerWidth) * 2 - 1;
+      const ndcY = -((cy / window.innerHeight) * 2 - 1);
       const halfH = Math.tan((FOV * Math.PI) / 360) * CAM_Z;
       const halfW = halfH * (size.width / size.height);
       mouse.current.set(ndcX * halfW, ndcY * halfH);
+      lastInput.current = performance.now();
     };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
+    const onPointer = (e: PointerEvent) => setFrom(e.clientX, e.clientY);
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) setFrom(t.clientX, t.clientY);
+    };
+    window.addEventListener("pointermove", onPointer, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("touchmove", onTouch);
+    };
   }, [size.width, size.height]);
 
   useFrame((_, delta) => {
@@ -213,6 +235,16 @@ function Particles({ dark }: { dark: boolean }) {
     scrollVel.current += (v - scrollVel.current) * 0.06;
     u.uSpeed.value = 0.28 * (1 + scrollVel.current * 2.0);
     u.uTime.value += delta;
+    // touch devices: when the finger is idle, drift the repel point autonomously
+    if (coarse.current && performance.now() - lastInput.current > 2500) {
+      const t = u.uTime.value;
+      const halfH = Math.tan((FOV * Math.PI) / 360) * CAM_Z;
+      const halfW = halfH * (size.width / size.height);
+      mouse.current.set(
+        Math.sin(t * 0.33) * halfW * 0.55,
+        Math.sin(t * 0.21 + 1.7) * halfH * 0.45
+      );
+    }
     u.uMouse.value.lerp(mouse.current, 0.12);
     u.uColor.value.set(dark ? "#E2B84C" : "#84202A");
     u.uRed.value.set(dark ? "#D61F33" : "#A81020");
@@ -243,15 +275,17 @@ function Particles({ dark }: { dark: boolean }) {
 
 export default function ParticleField() {
   const { theme } = useTheme();
-  const [enabled, setEnabled] = useState(false);
+  const [cfg, setCfg] = useState<{ count: number; dprMax: number } | null>(null);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setEnabled(!reduced && window.innerWidth >= 640);
+    if (reduced) return;
+    const small = window.innerWidth < 640;
+    setCfg({ count: small ? 3500 : 9000, dprMax: small ? 1.75 : 2 });
   }, []);
 
-  if (!enabled) {
-    // mobile / reduced-motion fallback: static gold wash
+  if (!cfg) {
+    // reduced-motion fallback: static gold wash
     return (
       <div
         aria-hidden="true"
@@ -268,10 +302,10 @@ export default function ParticleField() {
     <div className="absolute inset-0" aria-hidden="true">
       <Canvas
         camera={{ position: [0, 0, CAM_Z], fov: FOV }}
-        dpr={[1, 2]}
+        dpr={[1, cfg.dprMax]}
         gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       >
-        <Particles dark={theme === "dark"} />
+        <Particles dark={theme === "dark"} count={cfg.count} />
         <EnsoRing dark={theme === "dark"} />
       </Canvas>
     </div>
